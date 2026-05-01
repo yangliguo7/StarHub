@@ -70,3 +70,5 @@ export interface ApiResponse<T> {
 export type Theme = 'light' | 'dark'
 export type Language = 'zh' | 'en'
 
+// 热门仓库时期
+export type TrendingPeriod = 'daily' | 'weekly' | 'monthly'
