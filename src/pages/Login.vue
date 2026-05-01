@@ -458,7 +458,7 @@ const handleLogin = () => {
   // 使用 hash 路由作为回调地址（像原项目一样）
   const params = {
     client_id: clientId,
-    redirect_uri: location.origin + '#/login'
+    redirect_uri: location.origin
   }
   const base = 'https://github.com/login/oauth/authorize?'
   const url = base + qs.stringify(params)
