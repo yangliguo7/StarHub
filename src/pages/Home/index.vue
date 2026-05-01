@@ -2,10 +2,16 @@
   <div class="home-page">
     <HomeLayout>
       <template #sidebar>
-        <SideMenu />
+        <SideMenu 
+          :syncing="syncing" 
+          :active-view="activeView"
+          @switch-view="handleSwitchView"
+          @open-ai-chat="handleOpenAIChat"
+        />
       </template>
       <template #main>
-        <div class="home-content">
+        <!-- Stars 视图 -->
+        <div v-if="activeView === 'stars'" class="home-content">
           <div class="repo-list-wrapper" :style="{ width: repoListWidth + 'px' }">
             <RepoList
               :repos="filteredRepos"
@@ -15,7 +21,7 @@
               @repo-click="handleRepoClick"
             />
           </div>
-          <div 
+          <div
             v-if="selectedRepo"
             class="content-resize-handle"
             @mousedown="startContentResize"
@@ -28,8 +34,24 @@
           </div>
           <EmptyState v-else />
         </div>
+        
+        <!-- 发现视图 -->
+        <div v-else class="home-content">
+          <DiscoverView @repo-click="handleRepoClick" />
+        </div>
       </template>
     </HomeLayout>
+    
+    <!-- AI 对话弹窗 -->
+    <el-dialog
+      v-model="showAIChat"
+      title="🤖 AI 助手"
+      width="600px"
+      :close-on-click-modal="false"
+      destroy-on-close
+    >
+      <AIChatDialog @repo-click="handleRepoClick" />
+    </el-dialog>
   </div>
 </template>
 
@@ -42,12 +64,16 @@ import SideMenu from './components/SideMenu.vue'
 import RepoList from './components/RepoList.vue'
 import DetailView from './components/DetailView.vue'
 import EmptyState from './components/EmptyState.vue'
+import DiscoverView from './components/DiscoverView.vue'
+import AIChatDialog from './components/AIChatDialog.vue'
 import type { Repository } from '@/types'
 
 const repoStore = useRepoStore()
 const tagStore = useTagStore()
 
 const selectedRepo = ref<Repository | null>(null)
+const activeView = ref<'stars' | 'discover'>('stars')
+const showAIChat = ref(false)
 
 const filteredRepos = computed(() => repoStore.filteredRepos)
 const loading = computed(() => repoStore.isFetching)
@@ -85,6 +111,15 @@ const handleRepoClick = (repo: Repository) => {
 
 const handleCloseDetail = () => {
   selectedRepo.value = null
+}
+
+const handleSwitchView = (view: 'stars' | 'discover') => {
+  activeView.value = view
+  selectedRepo.value = null
+}
+
+const handleOpenAIChat = () => {
+  showAIChat.value = true
 }
 
 onMounted(async () => {
