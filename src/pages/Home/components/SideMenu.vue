@@ -124,6 +124,23 @@
       </el-collapse-transition>
     </div>
 
+    <!-- 发现和 AI 助手 -->
+    <div class="menu-section">
+      <div 
+        class="menu-item" 
+        :class="{ 'is-active': activeView === 'discover' }"
+        @click="$emit('switch-view', 'discover')"
+      >
+        <el-icon class="menu-icon"><TrendCharts /></el-icon>
+        <span class="menu-text">🔥 发现</span>
+      </div>
+      <div class="menu-item" @click="$emit('open-ai-chat')">
+        <el-icon class="menu-icon"><ChatDotRound /></el-icon>
+        <span class="menu-text">🤖 AI 助手</span>
+        <span class="menu-badge">AI</span>
+      </div>
+    </div>
+
     <div class="menu-section">
       <div class="menu-header collapsible" @click="languageExpanded = !languageExpanded">
         <h3>{{ t('menu.languages') }}</h3>
@@ -901,7 +918,17 @@ onMounted(() => {
       color: #409EFF !important;
     }
     
-    .menu-sync-icon {
+    .menu-badge {
+  margin-left: auto;
+  padding: 2px 6px;
+  background: var(--el-color-primary);
+  color: white;
+  font-size: 10px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.menu-sync-icon {
       color: #409EFF !important;
     }
     
@@ -926,7 +953,17 @@ onMounted(() => {
     transition: color $transition-base;
   }
 
-  .menu-sync-icon {
+  .menu-badge {
+  margin-left: auto;
+  padding: 2px 6px;
+  background: var(--el-color-primary);
+  color: white;
+  font-size: 10px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.menu-sync-icon {
     margin-right: $spacing-xs;
     font-size: 14px;
     color: var(--el-color-primary);
