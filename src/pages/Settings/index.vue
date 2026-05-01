@@ -70,12 +70,12 @@
         <el-form :model="aiConfig" label-width="120px" label-position="left">
           <el-form-item :label="t('settings.aiPlatform')">
             <el-select v-model="aiConfig.provider" :placeholder="t('settings.selectAIPlatform')" @change="handleProviderChange">
+              <el-option label="Cloudflare Workers AI（免费）" value="cloudflare" />
               <el-option :label="t('settings.openaiGuide')" value="openai" />
               <el-option :label="t('settings.claudeGuide')" value="claude" />
               <el-option :label="t('settings.qwenGuide')" value="qwen" />
               <el-option :label="t('settings.zhipuGuide')" value="zhipu" />
               <el-option :label="t('settings.deepseekGuide')" value="deepseek" />
-          <el-option label="Cloudflare Workers AI" value="cloudflare" />
             </el-select>
           </el-form-item>
 
