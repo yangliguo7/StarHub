@@ -212,6 +212,9 @@ const scrollToBottom = () => {
 }
 
 onMounted(() => {
+  // 刷新模型配置（确保使用最新设置）
+  aiChatService.refreshModel()
+  
   // 欢迎消息
   messages.value.push({
     role: 'assistant',
