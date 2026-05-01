@@ -356,7 +356,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Download, Upload, Delete, View } from '@element-plus/icons-vue'
-import { getAIConfig, saveAIConfig, DEFAULT_MODELS, DEFAULT_BASE_URLS, type AIConfig } from '@/config/ai'
+import { getAIConfig, saveAIConfig, DEFAULT_MODELS, DEFAULT_BASE_URLS, CLOUDFLARE_MODELS, type AIConfig } from '@/config/ai'
 import {
   getCategoryPresets,
   saveCategoryPresets,
