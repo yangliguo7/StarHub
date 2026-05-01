@@ -228,8 +228,8 @@ const filterType = computed(() => repoStore.filterType)
 const reposCount = computed(() => repoStore.repos.length)
 const untaggedCount = computed(() => repoStore.untaggedRepos.length)
 const syncing = computed(() => repoStore.isSyncing)
-const languageExpanded = ref(true)
-const categoryExpanded = ref(true)
+const languageExpanded = ref(false)
+const categoryExpanded = ref(false)
 const isClassifying = ref(false)
 const shouldStopClassifying = ref(false) // 停止分类标志
 const classifyNotificationHandle = ref<any>(null) // 当前分类通知句柄
