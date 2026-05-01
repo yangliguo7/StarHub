@@ -488,3 +488,5 @@ MIT License
 - [Vite](https://vitejs.dev/) - 下一代前端构建工具
 - [Element Plus](https://element-plus.org/) - Vue 3 UI 组件库
 - [Cloudflare](https://www.cloudflare.com/) - 免费部署平台
+
+<!-- deploy trigger -->
