@@ -708,10 +708,20 @@ const resetModel = () => {
   aiConfig.value.model = ''
 }
 
+const saveCfAccountId = () => {
+  localStorage.setItem('cf_account_id', cfAccountId.value)
+}
+
 const handleSave = () => {
-  if (!aiConfig.value.apiKey) {
+  // Cloudflare 不需要 API Key
+  if (aiConfig.value.provider !== 'cloudflare' && !aiConfig.value.apiKey) {
     ElMessage.warning('请输入 API Key')
     return
+  }
+
+  // 保存 Cloudflare Account ID
+  if (aiConfig.value.provider === 'cloudflare') {
+    saveCfAccountId()
   }
 
   saveAIConfig(aiConfig.value)
