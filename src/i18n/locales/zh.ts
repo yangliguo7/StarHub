@@ -204,6 +204,7 @@ export default {
     apiGuide: 'API 获取指南',
     openaiGuide: 'OpenAI (GPT)',
     claudeGuide: 'Anthropic (Claude)',
+  cloudflareGuide: 'Cloudflare Workers AI',
     qwenGuide: '通义千问 (Qwen)',
     zhipuGuide: '智谱 AI (GLM)',
     deepseekGuide: 'DeepSeek',

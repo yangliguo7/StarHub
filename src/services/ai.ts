@@ -102,6 +102,58 @@ async function callZhipu(
   return data.choices[0].message.content
 }
 
+
+// 调用 Cloudflare Workers AI
+async function callCloudflare(
+  messages: any[],
+  apiKey: string,
+  baseURL: string,
+  model: string,
+  accountId?: string
+): Promise<string> {
+  // Cloudflare Workers AI 使用 OpenAI 兼容格式
+  // 但需要 account_id 和特殊的 endpoint
+  const cfAccountId = accountId || localStorage.getItem('cf_account_id') || ''
+  
+  if (!cfAccountId) {
+    throw new Error('请在设置中配置 Cloudflare Account ID')
+  }
+  
+  const url = `https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/ai/run/${model}`
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      messages,
+      temperature: 0.3,
+      max_tokens: 2000
+    })
+  })
+
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(`Cloudflare Workers AI request failed: ${response.status} ${error}`)
+  }
+
+  const data = await response.json()
+  
+  // Cloudflare Workers AI 返回格式: { result: { response: "..." } }
+  if (data.result && data.result.response) {
+    return data.result.response
+  }
+  
+  // 兼容 OpenAI 格式
+  if (data.choices && data.choices[0]) {
+    return data.choices[0].message.content
+  }
+  
+  throw new Error('Cloudflare Workers AI 返回格式异常')
+}
+
 // 批量分类仓库（自动分批处理）
 export async function classifyRepositories(
   repos: Repository[],
@@ -310,6 +362,8 @@ ${categoryList}
     responseText = await callClaude(messages, config.apiKey, baseURL, model)
   } else if (config.provider === 'zhipu') {
     responseText = await callZhipu(messages, config.apiKey, baseURL, model)
+  } else if (config.provider === 'cloudflare') {
+    responseText = await callCloudflare(messages, config.apiKey, baseURL, model)
   } else {
     // OpenAI, Qwen, DeepSeek 等都使用 OpenAI 兼容接口
     responseText = await callOpenAICompatible(messages, config.apiKey, baseURL, model)
@@ -443,6 +497,8 @@ function getDelayTime(provider: string): number {
     case 'zhipu':
     case 'deepseek':
       return 2 // 国内 API 通常限制更宽松
+    case 'cloudflare':
+      return 1 // Cloudflare 免费额度充足
     default:
       return 3
   }
