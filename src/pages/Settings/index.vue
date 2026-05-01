@@ -75,6 +75,7 @@
               <el-option :label="t('settings.qwenGuide')" value="qwen" />
               <el-option :label="t('settings.zhipuGuide')" value="zhipu" />
               <el-option :label="t('settings.deepseekGuide')" value="deepseek" />
+          <el-option label="Cloudflare Workers AI" value="cloudflare" />
             </el-select>
           </el-form-item>
 
@@ -86,6 +87,17 @@
               :placeholder="t('settings.enterAPIKey')"
             />
           </el-form-item>
+        <!-- Cloudflare Account ID (only show when cloudflare is selected) -->
+        <el-form-item v-if="aiConfig.provider === 'cloudflare'" label="Account ID">
+          <el-input
+            v-model="cfAccountId"
+            placeholder="你的 Cloudflare Account ID"
+            @change="saveCfAccountId"
+          />
+          <div class="form-tip">
+            在 https://dash.cloudflare.com/ 右侧找到 Account ID
+          </div>
+        </el-form-item>
 
           <el-form-item :label="t('settings.apiAddress')">
             <el-input
@@ -100,7 +112,24 @@
           </el-form-item>
 
           <el-form-item :label="t('settings.model')">
+            <!-- Cloudflare 用下拉选择 -->
+            <el-select 
+              v-if="aiConfig.provider === 'cloudflare'"
+              v-model="aiConfig.model" 
+              :placeholder="'选择模型（默认: ' + getDefaultModel() + '）'"
+              style="width: 100%"
+              filterable
+            >
+              <el-option
+                v-for="m in cloudflareModels"
+                :key="m.value"
+                :label="m.label"
+                :value="m.value"
+              />
+            </el-select>
+            <!-- 其他平台用输入框 -->
             <el-input
+              v-else
               v-model="aiConfig.model"
               :placeholder="getDefaultModel()"
             >
@@ -257,6 +286,16 @@
                 <li>{{ t('settings.recommendedModel') }}: deepseek-chat（{{ t('settings.costEffective') }}）</li>
               </ol>
             </el-collapse-item>
+        <el-collapse-item title="Cloudflare Workers AI" name="cloudflare">
+          <ol>
+            <li>访问 <a href="https://dash.cloudflare.com/" target="_blank">Cloudflare Dashboard</a></li>
+            <li>左侧菜单点击 "Workers & Pages" → "Workers AI"</li>
+            <li>获取 Account ID（在页面右侧）</li>
+            <li>在 "Overview" 页创建 API Token</li>
+            <li>推荐模型：@cf/meta/llama-3-8b-instruct（免费）</li>
+            <li>免费额度：每天 10,000 次推理</li>
+          </ol>
+        </el-collapse-item>
           </el-collapse>
         </div>
       </el-card>
