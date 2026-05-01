@@ -38,11 +38,11 @@
             <span class="hero-highlight">GitHub Stars</span>
           </h1>
           <p class="hero-description">
-            {{ currentLanguage === 'zh' 
-              ? 'StarHub 让你告别杂乱无章的 Star 列表。当收藏数量达到数百甚至上千时，找到需要的项目变得异常困难——StarHub 正是为解决这个问题而生。智能标签、AI 分类、极速搜索，让你的技术收藏真正发挥价值。' 
+            {{ currentLanguage === 'zh'
+              ? 'StarHub 让你告别杂乱无章的 Star 列表。当收藏数量达到数百甚至上千时，找到需要的项目变得异常困难——StarHub 正是为解决这个问题而生。智能标签、AI 分类、极速搜索，让你的技术收藏真正发挥价值。'
               : 'Say goodbye to messy star lists. When you have hundreds or thousands of stars, finding what you need becomes incredibly hard. StarHub was built to solve this - smart tagging, AI classification, and lightning-fast search make your tech collection truly valuable.' }}
           </p>
-          
+
           <div class="hero-actions">
           <el-button
             type="primary"
@@ -69,7 +69,7 @@
             show-icon
             class="error-alert"
           />
-          
+
           <div class="hero-stats">
             <div class="stat-item">
               <span class="stat-value">Vue 3</span>
@@ -107,11 +107,11 @@
           {{ currentLanguage === 'zh' ? '解决 Star 管理痛点' : 'Solving Star Management Pain Points' }}
         </h2>
         <p class="intro-description">
-          {{ currentLanguage === 'zh' 
-            ? '❌ Star 了很多优秀项目，但需要时找不到？❌ GitHub 原生列表只能按时间排序？❌ 手动整理太耗时？StarHub 提供智能标签系统、AI 自动分类、毫秒级搜索，让你的技术收藏真正井井有条。所有数据本地存储，隐私安全可控。' 
+          {{ currentLanguage === 'zh'
+            ? '❌ Star 了很多优秀项目，但需要时找不到？❌ GitHub 原生列表只能按时间排序？❌ 手动整理太耗时？StarHub 提供智能标签系统、AI 自动分类、毫秒级搜索，让你的技术收藏真正井井有条。所有数据本地存储，隐私安全可控。'
             : '❌ Starred great projects but can\'t find them when needed? ❌ GitHub\'s native list only sorts by time? ❌ Manual organization too time-consuming? StarHub offers smart tagging, AI auto-classification, and instant search. All data stored locally for privacy and security.' }}
         </p>
-        
+
         <div class="intro-highlights">
           <div class="highlight-item">
             <div class="highlight-number">10,000+</div>
@@ -236,8 +236,8 @@
             </div>
             <div class="feature-item-content">
               <h3>{{ currentLanguage === 'zh' ? '智能标签系统' : 'Smart Tagging System' }}</h3>
-              <p>{{ currentLanguage === 'zh' 
-                ? '18 种预设分类覆盖 Web、移动、AI、DevOps 等主流技术领域。支持自定义标签、Emoji 图标、18 种颜色。一个仓库多个标签，批量操作高效管理。' 
+              <p>{{ currentLanguage === 'zh'
+                ? '18 种预设分类覆盖 Web、移动、AI、DevOps 等主流技术领域。支持自定义标签、Emoji 图标、18 种颜色。一个仓库多个标签，批量操作高效管理。'
                 : '18 presets cover Web, Mobile, AI, DevOps, and more. Custom tags with emoji icons and 18 colors. Multiple tags per repo, batch operations for efficiency.' }}</p>
             </div>
           </div>
@@ -247,8 +247,8 @@
             </div>
             <div class="feature-item-content">
               <h3>{{ currentLanguage === 'zh' ? '全文即时搜索' : 'Full-text Instant Search' }}</h3>
-              <p>{{ currentLanguage === 'zh' 
-                ? '基于 IndexedDB 本地存储，搜索延迟小于 10ms。支持仓库名、描述、编程语言多维度搜索，配合标签筛选精准定位，支持 10000+ 仓库。' 
+              <p>{{ currentLanguage === 'zh'
+                ? '基于 IndexedDB 本地存储，搜索延迟小于 10ms。支持仓库名、描述、编程语言多维度搜索，配合标签筛选精准定位，支持 10000+ 仓库。'
                 : 'IndexedDB-based local storage with <10ms search latency. Multi-dimensional search across names, descriptions, languages. Tag filtering for precision. Supports 10,000+ repos.' }}</p>
             </div>
           </div>
@@ -258,8 +258,8 @@
             </div>
             <div class="feature-item-content">
               <h3>{{ currentLanguage === 'zh' ? 'AI 智能分类' : 'AI Smart Classification' }}</h3>
-              <p>{{ currentLanguage === 'zh' 
-                ? '支持 OpenAI、Claude、DeepSeek、通义千问、智谱 AI 五种服务。分析仓库名称、描述和 README，批量分类准确率高达 95%，一键整理上千仓库。' 
+              <p>{{ currentLanguage === 'zh'
+                ? '支持 OpenAI、Claude、DeepSeek、通义千问、智谱 AI 五种服务。分析仓库名称、描述和 README，批量分类准确率高达 95%，一键整理上千仓库。'
                 : 'Supports OpenAI, Claude, DeepSeek, Qwen, and Zhipu AI. Analyzes repo names, descriptions and READMEs. 95% accuracy for batch classification of thousands of repos.' }}</p>
             </div>
           </div>
@@ -269,8 +269,8 @@
             </div>
             <div class="feature-item-content">
               <h3>{{ currentLanguage === 'zh' ? 'README 即时预览' : 'README Instant Preview' }}</h3>
-              <p>{{ currentLanguage === 'zh' 
-                ? '完整 GFM Markdown 渲染，highlight.js 支持 100+ 种语言语法高亮。DOMPurify 安全过滤，图片表格完美显示，无需跳转即可了解项目。' 
+              <p>{{ currentLanguage === 'zh'
+                ? '完整 GFM Markdown 渲染，highlight.js 支持 100+ 种语言语法高亮。DOMPurify 安全过滤，图片表格完美显示，无需跳转即可了解项目。'
                 : 'Full GFM Markdown rendering, highlight.js supports 100+ languages. DOMPurify security filtering, perfect image/table display. Quick insights without leaving.' }}</p>
             </div>
           </div>
@@ -402,23 +402,23 @@ const login = async (code: string) => {
     const res = await authApi.getToken(code)
     const { token, token_type, access_token } = res.data
     const ghToken = `${token_type} ${access_token}`
-    
+
     AuthToken.setToken(token, ghToken)
-    
+
     const user = await githubApi.getLoginUser()
     userStore.setUser(user.data)
-    
+
     const redirect = (route.query.redirect as string) || '/home'
     router.push(redirect)
   } catch (e: any) {
     console.error('Login error:', e)
-    
+
     // 显示更详细的错误信息
     if (e.response) {
       // HTTP 错误
       const status = e.response.status
       const data = e.response.data
-      
+
       if (status === 404) {
         error.value = 'API 端点未找到。请确保 Cloudflare Workers 已部署，或使用本地开发服务器。\n\n错误详情：' + (data?.error || e.message)
       } else if (status === 500) {
@@ -433,7 +433,7 @@ const login = async (code: string) => {
       // 其他错误
       error.value = t('login.error')
     }
-    
+
     AuthToken.clean()
   } finally {
     loading.value = false
@@ -447,7 +447,7 @@ const handleLogin = () => {
   // GitHub OAuth parameters（完全按照原项目的方式）
   // 注意：GitHub OAuth 必须要有 Client ID，这是 GitHub 的安全要求
   const clientId = GITHUB_OAUTH_CONFIG.CLIENT_ID
-  
+
   // 检查是否配置了 Client ID
   if (!clientId || !clientId.trim()) {
     error.value = t('login.configError')
@@ -458,11 +458,11 @@ const handleLogin = () => {
   // 使用 hash 路由作为回调地址（像原项目一样）
   const params = {
     client_id: clientId,
-    redirect_uri: location.origin
+    redirect_uri: location.origin + '#/login'
   }
   const base = 'https://github.com/login/oauth/authorize?'
   const url = base + qs.stringify(params)
-  
+
   // Open OAuth window
   const authWindow = openWindowCenter(url, 'authWindow', 600, 600)
 
@@ -470,14 +470,14 @@ const handleLogin = () => {
   ;(window as any).oauthGetCodeCb = (code: string) => {
     if (authWindow) authWindow.close()
     delete (window as any).oauthGetCodeCb
-    
+
     if (!code) {
       console.error('github auth error')
       error.value = t('login.error')
       loading.value = false
       return
     }
-    
+
     login(code)
   }
 }
@@ -530,7 +530,7 @@ const toggleLanguage = () => {
 }
 
 .stars-1 {
-  background-image: 
+  background-image:
     radial-gradient(2px 2px at 20px 30px, #eee, transparent),
     radial-gradient(2px 2px at 60px 70px, #fff, transparent),
     radial-gradient(1px 1px at 50px 50px, #ddd, transparent),
@@ -717,7 +717,7 @@ const toggleLanguage = () => {
   list-style: none;
   padding: 0;
   margin: 0 0 32px;
-  
+
   li {
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.8);
@@ -1057,12 +1057,12 @@ const toggleLanguage = () => {
 .browser-dots {
   display: flex;
   gap: 8px;
-  
+
   .dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    
+
     &.dot-red { background: #ff5f56; }
     &.dot-yellow { background: #ffbd2e; }
     &.dot-green { background: #27c93f; }
@@ -1094,7 +1094,7 @@ const toggleLanguage = () => {
   display: flex;
   gap: 20px;
   animation: carousel-scroll 20s linear infinite;
-  
+
   &:hover {
     animation-play-state: paused;
   }
@@ -1152,7 +1152,7 @@ const toggleLanguage = () => {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   width: 100%;
-  
+
   &:last-child { width: 70%; }
 }
 
@@ -1184,19 +1184,19 @@ const toggleLanguage = () => {
   width: 80px;
   height: 80px;
   margin-bottom: 8px;
-  
+
   svg {
     width: 100%;
     height: 100%;
     transform: rotate(-90deg);
   }
-  
+
   .ai-bg {
     fill: none;
     stroke: rgba(255, 255, 255, 0.1);
     stroke-width: 8;
   }
-  
+
   .ai-progress {
     fill: none;
     stroke: #60a5fa;
@@ -1249,7 +1249,7 @@ const toggleLanguage = () => {
   background: rgba(255, 255, 255, 0.12);
   border-radius: 4px;
   margin-bottom: 6px;
-  
+
   &.short { width: 65%; }
 }
 
@@ -1324,7 +1324,7 @@ const toggleLanguage = () => {
     text-align: center;
     gap: 16px;
   }
-  
+
   .feature-item-icon {
     margin-bottom: 0;
   }
@@ -1424,7 +1424,7 @@ const toggleLanguage = () => {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -1442,11 +1442,11 @@ const toggleLanguage = () => {
     border-color: rgba(96, 165, 250, 0.4);
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 12px 32px rgba(96, 165, 250, 0.2);
-    
+
     &::before {
       opacity: 1;
     }
-    
+
     .tech-icon {
       transform: scale(1.15) rotate(5deg);
     }
@@ -1530,7 +1530,7 @@ const toggleLanguage = () => {
     text-decoration: none;
     font-size: 0.875rem;
     transition: color 0.2s;
-    
+
     &:hover {
       color: #60a5fa;
     }
