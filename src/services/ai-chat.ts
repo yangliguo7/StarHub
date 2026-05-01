@@ -1,3 +1,5 @@
+import { getAIConfig, getEffectiveModel, CLOUDFLARE_MODELS } from '@/config/ai'
+
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant'
   content: string
@@ -6,18 +8,64 @@ export interface ChatMessage {
 export class AIChatService {
   private model: string
   
-  constructor(model = '@cf/meta/llama-3-8b-instruct') {
-    this.model = model
+  constructor() {
+    // 从配置读取模型，而不是硬编码
+    this.model = getEffectiveModel()
+  }
+  
+  // 刷新模型配置（用户修改设置后调用）
+  refreshModel() {
+    this.model = getEffectiveModel()
   }
   
   async chat(messages: ChatMessage[]): Promise<string> {
-    const response = await fetch('/api/ai', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages,
-        model: this.model
+    const config = getAIConfig()
+    
+    // Cloudflare 使用 Pages Function 代理
+    if (config.provider === 'cloudflare') {
+      const response = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages,
+          model: this.model
+        })
       })
+      
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}))
+        throw new Error(error.error || `AI request failed: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      return data.content || data.response || ''
+    }
+    
+    // 其他平台直接调用 API
+    const baseURL = config.baseURL || getDefaultBaseURL(config.provider)
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    }
+    
+    // OpenAI 兼容格式
+    if (config.provider === 'openai' || config.provider === 'qwen' || config.provider === 'deepseek') {
+      headers['Authorization'] = `Bearer ${config.apiKey}`
+    } else if (config.provider === 'claude') {
+      headers['x-api-key'] = config.apiKey
+      headers['anthropic-version'] = '2023-06-01'
+    } else if (config.provider === 'zhipu') {
+      headers['Authorization'] = `Bearer ${config.apiKey}`
+    }
+    
+    const body: any = {
+      model: this.model,
+      messages
+    }
+    
+    const response = await fetch(`${baseURL}/chat/completions`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body)
     })
     
     if (!response.ok) {
@@ -25,7 +73,7 @@ export class AIChatService {
     }
     
     const data = await response.json()
-    return data.response || data.choices?.[0]?.message?.content || ''
+    return data.choices?.[0]?.message?.content || ''
   }
   
   // 解析用户搜索意图
@@ -44,7 +92,7 @@ export class AIChatService {
     const starMatch = message.match(/(\d+)\s*(?:stars?|星|star)/i)
     if (starMatch) result.minStars = parseInt(starMatch[1])
     
-    // 提取关键词（移除语言和数字后的内容）
+    // 提取关键词
     const keywords = message
       .replace(/javascript|typescript|python|go|rust|java|c\+\+|php|ruby|swift|kotlin/gi, '')
       .replace(/\d+\s*(?:stars?|星|star)/gi, '')
@@ -72,6 +120,17 @@ export class AIChatService {
 - 如果推荐项目，给出仓库名称和简介
 - 保持简洁，不要太长`
   }
+}
+
+function getDefaultBaseURL(provider: string): string {
+  const urls: Record<string, string> = {
+    openai: 'https://api.openai.com/v1',
+    claude: 'https://api.anthropic.com/v1',
+    qwen: 'https://dashscope.aliyun.com/compatible-mode/v1',
+    zhipu: 'https://open.bigmodel.cn/api/paas/v4',
+    deepseek: 'https://api.deepseek.com/v1'
+  }
+  return urls[provider] || ''
 }
 
 export const aiChatService = new AIChatService()
