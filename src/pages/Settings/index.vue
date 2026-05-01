@@ -79,7 +79,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item :label="t('settings.apiKey')">
+          <el-form-item :label="t('settings.apiKey')" v-if="aiConfig.provider !== 'cloudflare'">
             <el-input
               v-model="aiConfig.apiKey"
               type="password"
@@ -99,7 +99,7 @@
           </div>
         </el-form-item>
 
-          <el-form-item :label="t('settings.apiAddress')">
+          <el-form-item :label="t('settings.apiAddress')" v-if="aiConfig.provider !== 'cloudflare'">
             <el-input
               v-model="aiConfig.baseURL"
               :placeholder="getDefaultBaseURL()"
