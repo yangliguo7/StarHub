@@ -25,6 +25,23 @@
       </div>
     </div>
 
+    <!-- 发现和 AI 助手 -->
+    <div class="menu-section">
+      <div
+        class="menu-item"
+        :class="{ 'is-active': activeView === 'discover' }"
+        @click="$emit('switch-view', 'discover')"
+      >
+        <el-icon class="menu-icon"><TrendCharts /></el-icon>
+        <span class="menu-text">🔥 发现</span>
+      </div>
+      <div class="menu-item" @click="$emit('open-ai-chat')">
+        <el-icon class="menu-icon"><ChatDotRound /></el-icon>
+        <span class="menu-text">🤖 AI 助手</span>
+        <span class="menu-badge">AI</span>
+      </div>
+    </div>
+
     <div class="menu-section">
       <div class="menu-header collapsible" @click="categoryExpanded = !categoryExpanded">
         <h3>{{ t('menu.tags') }}</h3>

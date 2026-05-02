@@ -381,6 +381,8 @@ const aiConfig = ref<AIConfig>({
   batchSize: 50
 })
 
+const cfAccountId = ref(localStorage.getItem('cf_account_id') || '')
+const cloudflareModels = CLOUDFLARE_MODELS
 const testing = ref(false)
 const exporting = ref(false)
 const importing = ref(false)
