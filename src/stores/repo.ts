@@ -24,7 +24,11 @@ export const useRepoStore = defineStore('repo', {
     selectedTag: null as string | null,
     // Pagination
     currentPage: 1,
-    pageSize: 50
+    pageSize: 50,
+    // AI analysis state machine
+    aiAnalyzing: false,
+    aiProgress: { current: 0, total: 0, failed: 0 } as { current: number; total: number; failed: number },
+    aiAbortController: null as AbortController | null
   }),
 
   getters: {
@@ -179,6 +183,11 @@ export const useRepoStore = defineStore('repo', {
           reposData.forEach((repo: any) => {
             // Sanitize data before storing
             const cleanRepo = sanitizeRepo(repo)
+            // Preserve AI summary from existing local data
+            const existing = allReposMap.get(cleanRepo.id)
+            if (existing?.aiSummary) {
+              cleanRepo.aiSummary = existing.aiSummary
+            }
             allReposMap.set(cleanRepo.id, cleanRepo)
           })
           
@@ -347,10 +356,13 @@ export const useRepoStore = defineStore('repo', {
         // Final update after all pages are fetched
         // Force final update
         updateReposFromMap(true)
-        
+
         // Mark sync as complete
         this.$state.isSyncing = false
         this.$state.currentSyncId = 0
+
+        // Fire-and-forget: trigger AI analysis for repos without summaries
+        this.analyzeStarredReposBackground()
 
         // Clean up tags for non-existent repos (will be called from component to avoid circular dependency)
       } catch (error: any) {
@@ -564,6 +576,90 @@ export const useRepoStore = defineStore('repo', {
         this.$state.isSyncing = false
         this.$state.isFetching = false
         throw error
+      }
+    },
+
+    // Background AI analysis — fire-and-forget, called after sync completes
+    async analyzeStarredReposBackground() {
+      if (this.$state.aiAnalyzing) return
+      if (!this.$state.repos.length) return
+
+      // Find repos without AI summary
+      const reposToAnalyze = this.$state.repos.filter(r => !r.aiSummary)
+      if (reposToAnalyze.length === 0) return
+
+      this.$state.aiAnalyzing = true
+      this.$state.aiProgress = { current: 0, total: reposToAnalyze.length, failed: 0 }
+      const abortController = new AbortController()
+      this.$state.aiAbortController = abortController
+
+      try {
+        const { ElNotification } = await import('element-plus')
+        const { analyzeStarredRepos } = await import('@/services/ai')
+
+        ElNotification({
+          title: 'AI 分析',
+          message: `开始分析 ${reposToAnalyze.length} 个仓库...`,
+          type: 'info',
+          duration: 3000
+        })
+
+        const results = await analyzeStarredRepos(
+          reposToAnalyze,
+          (progress) => {
+            this.$state.aiProgress = progress
+          },
+          abortController.signal
+        )
+
+        // Write results to repos and IndexedDB
+        const updatedRepos = this.$state.repos.map(repo => {
+          const analysis = results.get(repo.id)
+          if (analysis) {
+            return { ...repo, aiSummary: analysis.summary }
+          }
+          return repo
+        })
+        this.$state.repos = updatedRepos
+
+        // Persist to IndexedDB
+        try {
+          await db.repos.bulkPut(updatedRepos)
+        } catch (e) {
+          console.error('Failed to persist AI summaries:', e)
+        }
+
+        ElNotification({
+          title: 'AI 分析',
+          message: `✓ 已分析 ${results.size} 个仓库` +
+            (this.$state.aiProgress.failed > 0 ? `，${this.$state.aiProgress.failed} 个失败` : ''),
+          type: 'success',
+          duration: 3000
+        })
+      } catch (error) {
+        console.error('AI analysis failed:', error)
+      } finally {
+        this.$state.aiAnalyzing = false
+        this.$state.aiAbortController = null
+      }
+    },
+
+    // Manual trigger: re-analyze all repos (or just unanalyzed)
+    async triggerAIAnalysis(reanalyzeAll = false) {
+      if (this.$state.aiAnalyzing) return
+
+      if (reanalyzeAll) {
+        // Clear all existing summaries
+        this.$state.repos = this.$state.repos.map(r => ({ ...r, aiSummary: undefined }))
+      }
+
+      await this.analyzeStarredReposBackground()
+    },
+
+    // Cancel ongoing AI analysis
+    cancelAIAnalysis() {
+      if (this.$state.aiAbortController) {
+        this.$state.aiAbortController.abort()
       }
     }
   }

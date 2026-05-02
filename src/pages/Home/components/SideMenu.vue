@@ -40,6 +40,15 @@
         <span class="menu-text">🤖 AI 助手</span>
         <span class="menu-badge">AI</span>
       </div>
+      <div
+        class="menu-item"
+        :class="{ 'is-analyzing': aiAnalyzing }"
+        @click="$emit('trigger-ai-analysis')"
+      >
+        <el-icon class="menu-icon" :class="{ 'is-loading': aiAnalyzing }"><MagicStick /></el-icon>
+        <span class="menu-text">{{ aiAnalyzing ? `AI 分析中... ${aiProgress.current}/${aiProgress.total}` : '✨ AI 摘要分析' }}</span>
+        <span v-if="aiAnalyzing" class="menu-badge analyzing">AI</span>
+      </div>
     </div>
 
     <div class="menu-section">
@@ -228,6 +237,8 @@ const filterType = computed(() => repoStore.filterType)
 const reposCount = computed(() => repoStore.repos.length)
 const untaggedCount = computed(() => repoStore.untaggedRepos.length)
 const syncing = computed(() => repoStore.isSyncing)
+const aiAnalyzing = computed(() => repoStore.aiAnalyzing)
+const aiProgress = computed(() => repoStore.aiProgress)
 const languageExpanded = ref(false)
 const categoryExpanded = ref(false)
 const isClassifying = ref(false)
@@ -926,6 +937,24 @@ onMounted(() => {
   font-size: 10px;
   border-radius: 4px;
   font-weight: 600;
+
+  &.analyzing {
+    background: rgba(124, 140, 248, 0.3);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+}
+
+.is-analyzing {
+  color: #7c8cf8 !important;
+
+  .menu-icon {
+    color: #7c8cf8 !important;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .menu-sync-icon {

@@ -2,11 +2,12 @@
   <div class="home-page">
     <HomeLayout>
       <template #sidebar>
-        <SideMenu 
-          :syncing="syncing" 
+        <SideMenu
+          :syncing="syncing"
           :active-view="activeView"
           @switch-view="handleSwitchView"
           @open-ai-chat="handleOpenAIChat"
+          @trigger-ai-analysis="handleTriggerAIAnalysis"
         />
       </template>
       <template #main>
@@ -120,6 +121,10 @@ const handleSwitchView = (view: 'stars' | 'discover') => {
 
 const handleOpenAIChat = () => {
   showAIChat.value = true
+}
+
+const handleTriggerAIAnalysis = () => {
+  repoStore.triggerAIAnalysis()
 }
 
 onMounted(async () => {

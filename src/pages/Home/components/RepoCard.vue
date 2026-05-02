@@ -24,7 +24,13 @@
       </span>
     </div>
 
-    <p v-if="repo.description" class="repo-description">
+    <!-- AI Summary -->
+    <p v-if="repo.aiSummary" class="repo-ai-summary">
+      <span class="ai-badge">AI</span>
+      {{ repo.aiSummary }}
+    </p>
+
+    <p v-if="repo.description" class="repo-description" :class="{ 'has-ai-summary': !!repo.aiSummary }">
       {{ repo.description }}
     </p>
 
@@ -208,15 +214,43 @@ watch(() => props.repo.id, () => {
   }
 }
 
-.repo-description {
-  color: var(--text-secondary);
+.repo-ai-summary {
+  color: var(--text-primary);
   font-size: 0.875rem;
   line-height: 1.5;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+
+  .ai-badge {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    background: rgba(124, 140, 248, 0.15);
+    color: #7c8cf8;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+  }
+}
+
+.repo-description {
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.4;
   margin-bottom: $spacing-sm;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+
+  &.has-ai-summary {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    -webkit-line-clamp: 1;
+  }
 }
 
 .repo-footer {

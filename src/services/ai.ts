@@ -583,6 +583,108 @@ export async function analyzeTrendingRepos(repos: Repository[]): Promise<Map<num
   return result
 }
 
+// AI 分析 starred 仓库生成摘要（更轻量，只返回 summary）
+export interface StarredRepoAnalysis {
+  id: number
+  summary: string
+}
+
+export interface AnalyzeProgress {
+  current: number
+  total: number
+  failed: number
+}
+
+export async function analyzeStarredRepos(
+  repos: Repository[],
+  onProgress?: (progress: AnalyzeProgress) => void,
+  abortSignal?: AbortSignal
+): Promise<Map<number, StarredRepoAnalysis>> {
+  const result = new Map<number, StarredRepoAnalysis>()
+  const BATCH_SIZE = 20
+  const totalBatches = Math.ceil(repos.length / BATCH_SIZE)
+  let failed = 0
+
+  const systemPrompt = `你是一个技术项目分析专家。对以下 GitHub 仓库，用一句简洁的中文说明每个项目是什么、做什么（不超过 50 字）。
+
+只返回 JSON 数组：
+[{"id": 123, "summary": "一句话说明"}]
+
+只返回 JSON，不要有其他文字。`
+
+  for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
+    if (abortSignal?.aborted) break
+
+    const start = batchIndex * BATCH_SIZE
+    const end = Math.min(start + BATCH_SIZE, repos.length)
+    const batch = repos.slice(start, end)
+
+    const repoInfo = batch.map(r => ({
+      id: r.id,
+      name: r.name,
+      full_name: r.full_name,
+      description: r.description || '',
+      language: r.language || '',
+      topics: r.topics || []
+    }))
+
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: JSON.stringify(repoInfo, null, 2) }
+    ]
+
+    try {
+      const config = getAIConfig()
+      const baseURL = config.baseURL || DEFAULT_BASE_URLS[config.provider]
+      const model = config.model || DEFAULT_MODELS[config.provider]
+
+      let responseText: string
+      if (config.provider === 'claude') {
+        responseText = await callClaude(messages, config.apiKey, baseURL, model)
+      } else if (config.provider === 'zhipu') {
+        responseText = await callZhipu(messages, config.apiKey, baseURL, model)
+      } else if (config.provider === 'cloudflare') {
+        responseText = await callCloudflare(messages, config.apiKey, baseURL, model)
+      } else {
+        responseText = await callOpenAICompatible(messages, config.apiKey, baseURL, model)
+      }
+
+      let jsonText = responseText.trim()
+      if (jsonText.startsWith('```json')) jsonText = jsonText.replace(/^```json\s*/, '').replace(/\s*```$/, '')
+      else if (jsonText.startsWith('```')) jsonText = jsonText.replace(/^```\s*/, '').replace(/\s*```$/, '')
+
+      const arrMatch = jsonText.match(/\[[\s\S]*\]/)
+      if (!arrMatch) throw new Error('Invalid JSON response')
+
+      const parsed: StarredRepoAnalysis[] = JSON.parse(arrMatch[0])
+      for (const item of parsed) {
+        if (item.id && item.summary) {
+          result.set(item.id, item)
+        }
+      }
+    } catch (error) {
+      console.error(`Batch ${batchIndex + 1}/${totalBatches} failed:`, error)
+      failed += batch.length
+    }
+
+    if (onProgress) {
+      onProgress({
+        current: Math.min(end, repos.length),
+        total: repos.length,
+        failed
+      })
+    }
+
+    // Delay between batches
+    if (batchIndex < totalBatches - 1) {
+      const delay = getDelayTime(getAIConfig().provider)
+      await new Promise(resolve => setTimeout(resolve, delay * 1000))
+    }
+  }
+
+  return result
+}
+
 // 预定义的分类颜色
 export const CATEGORY_COLORS: Record<string, string> = {
   'Web 开发': '#42b883',
