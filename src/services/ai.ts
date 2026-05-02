@@ -48,7 +48,11 @@ async function callClaude(
   const systemMessage = messages.find(m => m.role === 'system')
   const userMessages = messages.filter(m => m.role !== 'system')
 
-  const url = baseURL.endsWith('/messages') ? baseURL : `${baseURL}/messages`
+  // Resolve Claude API endpoint: support various baseURL formats
+  let url = baseURL
+  if (!url.endsWith('/messages')) {
+    url = url.endsWith('/v1') ? `${url}/messages` : `${url}/v1/messages`
+  }
   const response = await fetch(url, {
     method: 'POST',
     headers: {
