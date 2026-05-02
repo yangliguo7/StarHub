@@ -32,13 +32,24 @@
           <el-option label="Swift" value="swift" />
           <el-option label="Kotlin" value="kotlin" />
         </el-select>
+
+        <!-- 翻译开关 -->
+        <div class="translate-toggle">
+          <el-icon><Sunrise /></el-icon>
+          <el-switch
+            v-model="translateEnabled"
+            @change="handleTranslateChange"
+            size="small"
+          />
+          <span class="translate-label">翻译</span>
+        </div>
       </div>
     </div>
 
-    <!-- AI 分析状态 -->
-    <div v-if="analyzing" class="ai-status">
+    <!-- 翻译状态 -->
+    <div v-if="translating" class="translate-status">
       <el-icon class="is-loading"><Loading /></el-icon>
-      <span>AI 正在分析仓库信息...</span>
+      <span>正在翻译...</span>
     </div>
 
     <!-- 仓库列表 -->
@@ -53,7 +64,7 @@
         </span>
         <DiscoverRepoCard
           :repo="repo"
-          :analysis="analyses.get(repo.id) || null"
+          :translation="translateEnabled ? (translations.get(repo.id) || null) : null"
           @click="$emit('repo-click', repo)"
         />
       </div>
@@ -79,7 +90,7 @@ import { ref, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDiscoverStore } from '@/stores/discover'
 import DiscoverRepoCard from './DiscoverRepoCard.vue'
-import { Loading } from '@element-plus/icons-vue'
+import { Loading, Sunrise } from '@element-plus/icons-vue'
 import type { Repository, TrendingPeriod } from '@/types'
 
 const emit = defineEmits<{
@@ -87,26 +98,27 @@ const emit = defineEmits<{
 }>()
 
 const store = useDiscoverStore()
-const { repos, loading, hasMore, analyses, analyzing } = storeToRefs(store)
+const { repos, loading, hasMore, translations, translateEnabled, translating } = storeToRefs(store)
 
 const currentPeriod = ref<TrendingPeriod>('daily')
 const currentLanguage = ref('')
 const loadingMore = ref(false)
 
-// 时期切换
 const handlePeriodChange = (period: TrendingPeriod) => {
   store.period = period
   store.fetchTrending()
 }
 
-// 语言筛选
 watch(currentLanguage, (lang) => {
   store.language = lang
   store.page = 1
   store.fetchTrending()
 })
 
-// 加载更多
+const handleTranslateChange = (enabled: boolean) => {
+  store.setTranslateEnabled(enabled)
+}
+
 const loadMore = async () => {
   loadingMore.value = true
   try {
@@ -116,7 +128,6 @@ const loadMore = async () => {
   }
 }
 
-// 排名样式
 const getRankClass = (rank: number) => {
   if (rank === 1) return 'rank-gold'
   if (rank === 2) return 'rank-silver'
@@ -157,20 +168,37 @@ onMounted(() => {
   align-items: center;
 }
 
-.ai-status {
+.translate-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+
+  .el-icon {
+    color: #f59e0b;
+    font-size: 14px;
+  }
+}
+
+.translate-label {
+  user-select: none;
+}
+
+.translate-status {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 6px 12px;
   margin-bottom: 12px;
   border-radius: 8px;
   background: var(--el-fill-color-light);
   font-size: 0.8125rem;
-  color: var(--el-color-primary);
+  color: var(--text-secondary);
   flex-shrink: 0;
 
-  [data-theme='dark'] & {
-    background: rgba(96, 165, 250, 0.1);
+  .el-icon {
+    color: #f59e0b;
   }
 }
 
@@ -228,7 +256,6 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
-/* 暗色主题适配 */
 :root[data-theme="dark"] .rank-badge {
   background: var(--el-fill-color-darker);
 }

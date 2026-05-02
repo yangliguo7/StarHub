@@ -17,25 +17,16 @@
       </div>
     </div>
 
-    <!-- AI 分析结果 -->
-    <div v-if="analysis" class="card-analysis">
-      <p class="ai-summary">{{ analysis.summary }}</p>
-      <p class="ai-use-case">
-        <el-icon><User /></el-icon>
-        {{ analysis.useCase }}
-      </p>
+    <!-- 翻译模式：显示翻译 + 原文 -->
+    <div v-if="translation" class="card-translation">
+      <p class="translated-text">{{ translation }}</p>
+      <p v-if="repo.description" class="original-text">{{ repo.description }}</p>
     </div>
 
-    <!-- 无 AI 分析时显示原始描述 -->
+    <!-- 普通模式：显示原始描述 -->
     <p v-else-if="repo.description" class="repo-description">
       {{ repo.description }}
     </p>
-
-    <!-- AI 分析加载中 -->
-    <div v-else class="ai-loading">
-      <el-icon class="is-loading"><Loading /></el-icon>
-      <span>AI 分析中...</span>
-    </div>
 
     <div class="card-footer">
       <div class="card-tags">
@@ -43,33 +34,22 @@
           <span class="lang-dot" :style="{ backgroundColor: getLanguageColor(repo.language) }"></span>
           {{ repo.language }}
         </span>
-        <span v-for="tag in displayTags" :key="tag" class="ai-tag">{{ tag }}</span>
+        <span v-for="tag in displayTags" :key="tag" class="topic-tag">{{ tag }}</span>
       </div>
-      <a
-        v-if="analysis?.officialUrl"
-        :href="analysis.officialUrl"
-        target="_blank"
-        class="official-link"
-        @click.stop
-      >
-        <el-icon><Link /></el-icon>
-        官网
-      </a>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Star, ForkSpoon, User, Loading, Link } from '@element-plus/icons-vue'
+import { Star, ForkSpoon } from '@element-plus/icons-vue'
 import { getLanguageColor } from '@/utils/languageColors'
 import { formatNumber } from '@/utils'
 import type { Repository } from '@/types'
-import type { RepoAnalysis } from '@/services/ai'
 
 const props = defineProps<{
   repo: Repository
-  analysis?: RepoAnalysis | null
+  translation?: string | null
 }>()
 
 defineEmits<{
@@ -77,8 +57,7 @@ defineEmits<{
 }>()
 
 const displayTags = computed(() => {
-  if (!props.analysis?.tags) return []
-  return props.analysis.tags.slice(0, 4)
+  return (props.repo.topics || []).slice(0, 4)
 })
 </script>
 
@@ -150,28 +129,25 @@ const displayTags = computed(() => {
   }
 }
 
-.card-analysis {
+.card-translation {
   margin-bottom: 10px;
 
-  .ai-summary {
-    margin: 0 0 6px;
+  .translated-text {
+    margin: 0 0 4px;
     font-size: 0.875rem;
     color: var(--text-primary);
     line-height: 1.6;
   }
 
-  .ai-use-case {
+  .original-text {
     margin: 0;
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    .el-icon {
-      color: var(--el-color-primary);
-      font-size: 13px;
-    }
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 
@@ -184,19 +160,6 @@ const displayTags = computed(() => {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.ai-loading {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 10px;
-  font-size: 0.8125rem;
-  color: var(--text-tertiary);
-
-  .el-icon {
-    color: var(--el-color-primary);
-  }
 }
 
 .card-footer {
@@ -228,7 +191,7 @@ const displayTags = computed(() => {
   flex-shrink: 0;
 }
 
-.ai-tag {
+.topic-tag {
   display: inline-block;
   padding: 2px 8px;
   border-radius: 4px;
@@ -237,24 +200,8 @@ const displayTags = computed(() => {
   color: var(--text-secondary);
 
   [data-theme='dark'] & {
-    background: rgba(96, 165, 250, 0.1);
+    background: rgba(124, 140, 248, 0.1);
     color: #93c5fd;
-  }
-}
-
-.official-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.75rem;
-  color: var(--el-color-primary);
-  text-decoration: none;
-  flex-shrink: 0;
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 0.8;
-    text-decoration: underline;
   }
 }
 </style>

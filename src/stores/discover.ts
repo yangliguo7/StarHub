@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { githubApi } from '@/api/github'
 import type { Repository, TrendingPeriod } from '@/types'
-import type { RepoAnalysis } from '@/services/ai'
 
 interface CacheEntry {
   data: Repository[]
@@ -11,8 +10,11 @@ interface CacheEntry {
 export const useDiscoverStore = defineStore('discover', {
   state: () => ({
     repos: [] as Repository[],
-    analyses: new Map<number, RepoAnalysis>(),
-    analyzing: false,
+    // 翻译相关
+    translations: new Map<number, string>(), // repoId -> 翻译文本
+    translateEnabled: localStorage.getItem('discover_translate') === 'true',
+    translating: false,
+    // 其他状态
     loading: false,
     period: 'daily' as TrendingPeriod,
     language: '',
@@ -24,15 +26,13 @@ export const useDiscoverStore = defineStore('discover', {
 
   actions: {
     async fetchTrending() {
-      // 检查缓存（30分钟有效）
       const cacheKey = `${this.period}_${this.language}`
       const cached = this.cache.get(cacheKey)
       if (cached && Date.now() - cached.timestamp < 30 * 60 * 1000) {
         this.repos = cached.data
         this.page = 1
         this.hasMore = this.repos.length < this.totalCount
-        // 对缓存数据也触发 AI 分析（如果还没分析过）
-        this.analyzeCurrentRepos()
+        if (this.translateEnabled) this.translateCurrentRepos()
         return
       }
 
@@ -49,14 +49,12 @@ export const useDiscoverStore = defineStore('discover', {
         this.page = 1
         this.hasMore = this.repos.length < this.totalCount
 
-        // 更新缓存
         this.cache.set(cacheKey, {
           data: this.repos,
           timestamp: Date.now()
         })
 
-        // 触发 AI 分析
-        this.analyzeCurrentRepos()
+        if (this.translateEnabled) this.translateCurrentRepos()
       } catch (error) {
         console.error('Failed to fetch trending repos:', error)
         throw error
@@ -65,25 +63,37 @@ export const useDiscoverStore = defineStore('discover', {
       }
     },
 
-    async analyzeCurrentRepos() {
-      if (this.repos.length === 0 || this.analyzing) return
+    async translateCurrentRepos() {
+      if (this.repos.length === 0 || this.translating) return
 
-      // 找出还没分析的仓库
-      const unanalyzed = this.repos.filter(r => !this.analyses.has(r.id))
-      if (unanalyzed.length === 0) return
+      // 只翻译还没翻译的
+      const untranslated = this.repos.filter(r => !this.translations.has(r.id))
+      if (untranslated.length === 0) return
 
-      this.analyzing = true
+      this.translating = true
       try {
-        const { analyzeTrendingRepos } = await import('@/services/ai')
-        const results = await analyzeTrendingRepos(unanalyzed)
-        // 合并到现有 analyses
-        for (const [id, analysis] of results) {
-          this.analyses.set(id, analysis)
-        }
+        const { translateBatch } = await import('@/utils/translate')
+        const texts = untranslated.map(r => r.description || '')
+        const results = await translateBatch(texts)
+
+        results.forEach((translated, index) => {
+          const repo = untranslated[index]
+          if (repo && translated) {
+            this.translations.set(repo.id, translated)
+          }
+        })
       } catch (error) {
-        console.error('AI analysis failed:', error)
+        console.error('Translation failed:', error)
       } finally {
-        this.analyzing = false
+        this.translating = false
+      }
+    },
+
+    setTranslateEnabled(enabled: boolean) {
+      this.translateEnabled = enabled
+      localStorage.setItem('discover_translate', String(enabled))
+      if (enabled) {
+        this.translateCurrentRepos()
       }
     },
 
@@ -102,8 +112,7 @@ export const useDiscoverStore = defineStore('discover', {
         this.repos.push(...response.data.items)
         this.hasMore = this.repos.length < this.totalCount
 
-        // 对新加载的仓库触发 AI 分析
-        this.analyzeCurrentRepos()
+        if (this.translateEnabled) this.translateCurrentRepos()
       } catch (error) {
         console.error('Failed to load more repos:', error)
         this.page--
@@ -115,14 +124,14 @@ export const useDiscoverStore = defineStore('discover', {
 
     setPeriod(period: TrendingPeriod) {
       this.period = period
-      this.analyses.clear()
+      this.translations.clear()
       this.fetchTrending()
     },
 
     setLanguage(language: string) {
       this.language = language
       this.page = 1
-      this.analyses.clear()
+      this.translations.clear()
       this.fetchTrending()
     }
   }
