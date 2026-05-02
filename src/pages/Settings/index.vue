@@ -745,7 +745,8 @@ const handleTest = async () => {
     let response: Response
 
     if (aiConfig.value.provider === 'claude') {
-      response = await fetch(`${baseURL}/messages`, {
+      const claudeUrl = baseURL.endsWith('/messages') ? baseURL : `${baseURL}/messages`
+      response = await fetch(claudeUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
