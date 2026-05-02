@@ -108,7 +108,7 @@
                 <el-button @click="resetBaseURL">{{ t('common.reset') }}</el-button>
               </template>
             </el-input>
-            <div class="form-tip">{{ t('settings.emptyForDefault') }}</div>
+            <div class="form-tip">完整 API 端点 URL，留空使用默认值</div>
           </el-form-item>
 
           <el-form-item :label="t('settings.model')">
@@ -745,11 +745,7 @@ const handleTest = async () => {
     let response: Response
 
     if (aiConfig.value.provider === 'claude') {
-      let claudeUrl = baseURL
-      if (!claudeUrl.endsWith('/messages')) {
-        claudeUrl = claudeUrl.endsWith('/v1') ? `${claudeUrl}/messages` : `${claudeUrl}/v1/messages`
-      }
-      response = await fetch(claudeUrl, {
+      response = await fetch(baseURL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -763,7 +759,7 @@ const handleTest = async () => {
         })
       })
     } else {
-      response = await fetch(`${baseURL}/chat/completions`, {
+      response = await fetch(baseURL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1450,4 +1446,3 @@ const handleClearAll = async () => {
   }
 }
 </style>
-

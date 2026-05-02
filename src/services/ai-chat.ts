@@ -20,7 +20,7 @@ export class AIChatService {
   
   async chat(messages: ChatMessage[]): Promise<string> {
     const config = getAIConfig()
-    
+
     // Cloudflare 使用 Pages Function 代理
     if (config.provider === 'cloudflare') {
       const response = await fetch('/api/ai', {
@@ -31,47 +31,63 @@ export class AIChatService {
           model: this.model
         })
       })
-      
+
       if (!response.ok) {
         const error = await response.json().catch(() => ({}))
         throw new Error(error.error || `AI request failed: ${response.status}`)
       }
-      
+
       const data = await response.json()
       return data.content || data.response || ''
     }
-    
-    // 其他平台直接调用 API
-    const baseURL = config.baseURL || getDefaultBaseURL(config.provider)
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json'
+
+    const endpoint = config.baseURL || getDefaultEndpoint(config.provider)
+
+    // Claude: Anthropic 原生格式
+    if (config.provider === 'claude') {
+      const systemMessage = messages.find(m => m.role === 'system')
+      const userMessages = messages.filter(m => m.role !== 'system')
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': config.apiKey,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: this.model,
+          max_tokens: 2000,
+          system: systemMessage?.content || '',
+          messages: userMessages
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`Claude API request failed: ${response.status}`)
+      }
+
+      const data = await response.json()
+      return data.content?.[0]?.text || ''
     }
-    
-    // OpenAI 兼容格式
-    if (config.provider === 'openai' || config.provider === 'qwen' || config.provider === 'deepseek') {
-      headers['Authorization'] = `Bearer ${config.apiKey}`
-    } else if (config.provider === 'claude') {
-      headers['x-api-key'] = config.apiKey
-      headers['anthropic-version'] = '2023-06-01'
-    } else if (config.provider === 'zhipu') {
-      headers['Authorization'] = `Bearer ${config.apiKey}`
-    }
-    
-    const body: any = {
-      model: this.model,
-      messages
-    }
-    
-    const response = await fetch(`${baseURL}/chat/completions`, {
+
+    // 其他平台: OpenAI 兼容格式
+    const response = await fetch(endpoint, {
       method: 'POST',
-      headers,
-      body: JSON.stringify(body)
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${config.apiKey}`
+      },
+      body: JSON.stringify({
+        model: this.model,
+        messages
+      })
     })
-    
+
     if (!response.ok) {
       throw new Error(`AI request failed: ${response.status}`)
     }
-    
+
     const data = await response.json()
     return data.choices?.[0]?.message?.content || ''
   }
@@ -122,13 +138,13 @@ export class AIChatService {
   }
 }
 
-function getDefaultBaseURL(provider: string): string {
+function getDefaultEndpoint(provider: string): string {
   const urls: Record<string, string> = {
-    openai: 'https://api.openai.com/v1',
-    claude: 'https://api.anthropic.com/v1',
-    qwen: 'https://dashscope.aliyun.com/compatible-mode/v1',
-    zhipu: 'https://open.bigmodel.cn/api/paas/v4',
-    deepseek: 'https://api.deepseek.com/v1'
+    openai: 'https://api.openai.com/v1/chat/completions',
+    claude: 'https://api.anthropic.com/v1/messages',
+    qwen: 'https://dashscope.aliyun.com/compatible-mode/v1/chat/completions',
+    zhipu: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+    deepseek: 'https://api.deepseek.com/v1/chat/completions'
   }
   return urls[provider] || ''
 }

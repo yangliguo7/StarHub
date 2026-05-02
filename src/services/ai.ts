@@ -14,7 +14,7 @@ async function callOpenAICompatible(
   baseURL: string,
   model: string
 ): Promise<string> {
-  const response = await fetch(`${baseURL}/chat/completions`, {
+  const response = await fetch(baseURL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -48,12 +48,7 @@ async function callClaude(
   const systemMessage = messages.find(m => m.role === 'system')
   const userMessages = messages.filter(m => m.role !== 'system')
 
-  // Resolve Claude API endpoint: support various baseURL formats
-  let url = baseURL
-  if (!url.endsWith('/messages')) {
-    url = url.endsWith('/v1') ? `${url}/messages` : `${url}/v1/messages`
-  }
-  const response = await fetch(url, {
+  const response = await fetch(baseURL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -84,7 +79,7 @@ async function callZhipu(
   baseURL: string,
   model: string
 ): Promise<string> {
-  const response = await fetch(`${baseURL}/chat/completions`, {
+  const response = await fetch(baseURL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

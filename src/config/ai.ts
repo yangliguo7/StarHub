@@ -37,13 +37,13 @@ export const CLOUDFLARE_MODELS = [
   { value: '@cf/meta/llama-3-8b-instruct', label: 'Llama 3 8B（最轻量）' },
 ]
 
-// 各平台默认 API 地址
+// 各平台默认 API 端点（完整路径）
 export const DEFAULT_BASE_URLS = {
-  openai: 'https://api.openai.com/v1',
-  claude: 'https://api.anthropic.com/v1',
-  qwen: 'https://dashscope.aliyun.com/compatible-mode/v1',
-  zhipu: 'https://open.bigmodel.cn/api/paas/v4',
-  deepseek: 'https://api.deepseek.com/v1',
+  openai: 'https://api.openai.com/v1/chat/completions',
+  claude: 'https://api.anthropic.com/v1/messages',
+  qwen: 'https://dashscope.aliyun.com/compatible-mode/v1/chat/completions',
+  zhipu: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+  deepseek: 'https://api.deepseek.com/v1/chat/completions',
   cloudflare: '' // 动态构建
 }
 
