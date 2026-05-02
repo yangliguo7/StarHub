@@ -91,7 +91,7 @@
         <el-form-item v-if="aiConfig.provider === 'cloudflare'" label="Account ID">
           <el-input
             v-model="cfAccountId"
-            placeholder="你的 Cloudflare Account ID"
+            placeholder="4820eefb61e7bc5415c5164aa9518293（默认已内置）"
             @change="saveCfAccountId"
           />
           <div class="form-tip">
@@ -1188,7 +1188,7 @@ const handleClearAll = async () => {
   
   // 深色模式下使用与应用一致的背景色
   [data-theme='dark'] & {
-    background-color: #1c2333 !important;
+    background-color: #111827 !important;
   }
 }
 
@@ -1199,8 +1199,8 @@ const handleClearAll = async () => {
   
   // 深色模式下使用与应用一致的背景色
   [data-theme='dark'] & {
-    background-color: #252d3d !important;
-    border-bottom-color: rgba(96, 165, 250, 0.2) !important;
+    background-color: #1a2035 !important;
+    border-bottom-color: rgba(124, 140, 248, 0.2) !important;
   }
 
   h1 {
@@ -1224,8 +1224,8 @@ const handleClearAll = async () => {
   
   // 深色模式下使用与应用一致的背景色
   [data-theme='dark'] & {
-    background-color: #252d3d !important;
-    border-color: rgba(96, 165, 250, 0.2) !important;
+    background-color: #1a2035 !important;
+    border-color: rgba(124, 140, 248, 0.2) !important;
   }
 
   :deep(.el-card__header) {
@@ -1235,8 +1235,8 @@ const handleClearAll = async () => {
     
     // 深色模式下使用与应用一致的背景色
     [data-theme='dark'] & {
-      background-color: #252d3d !important;
-      border-bottom-color: rgba(96, 165, 250, 0.2) !important;
+      background-color: #1a2035 !important;
+      border-bottom-color: rgba(124, 140, 248, 0.2) !important;
     }
   }
   
@@ -1246,7 +1246,7 @@ const handleClearAll = async () => {
     
     // 深色模式下使用与应用一致的背景色
     [data-theme='dark'] & {
-      background-color: #252d3d !important;
+      background-color: #1a2035 !important;
     }
   }
 
@@ -1385,8 +1385,8 @@ const handleClearAll = async () => {
     
     // 深色模式下使用与应用一致的背景色
     [data-theme='dark'] & {
-      background: #252d3d !important;
-      border-color: rgba(96, 165, 250, 0.2) !important;
+      background: #1a2035 !important;
+      border-color: rgba(124, 140, 248, 0.2) !important;
     }
     
     &:hover {
@@ -1396,8 +1396,8 @@ const handleClearAll = async () => {
       
       // 深色模式下使用品牌色边框
       [data-theme='dark'] & {
-        border-color: #60a5fa !important;
-        box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2) !important;
+        border-color: #7c8cf8 !important;
+        box-shadow: 0 2px 8px rgba(124, 140, 248, 0.2) !important;
       }
     }
   }

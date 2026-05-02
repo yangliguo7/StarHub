@@ -493,7 +493,7 @@ onMounted(async () => {
 
   // 深色模式下使用与应用一致的背景色
   [data-theme='dark'] & {
-    background: #252d3d !important;
+    background: #1a2035 !important;
   }
 
   @media (max-width: 768px) {
@@ -529,14 +529,14 @@ onMounted(async () => {
 
   // 深色模式下的样式
   [data-theme='dark'] & {
-    background: rgba(96, 165, 250, 0.2);
+    background: rgba(124, 140, 248, 0.2);
     
     &:hover {
-      background: rgba(96, 165, 250, 0.5);
+      background: rgba(124, 140, 248, 0.5);
     }
     
     &:active {
-      background: rgba(96, 165, 250, 0.7);
+      background: rgba(124, 140, 248, 0.7);
     }
   }
 
@@ -553,7 +553,7 @@ onMounted(async () => {
   
   // 深色模式下使用与应用一致的背景色
   [data-theme='dark'] & {
-    background: #1c2333 !important;
+    background: #111827 !important;
   }
 }
 </style>

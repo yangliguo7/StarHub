@@ -140,8 +140,8 @@
         <div class="carousel-wrapper" style="margin-top: 40px; overflow: hidden; width: 100%;">
           <div class="carousel-track" style="display: flex; gap: 32px; animation: carousel-scroll 30s linear infinite; align-items: flex-start;">
             <!-- 4张卡片 -->
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(96, 165, 250, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #1a1f35; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
+            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
+              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
                 <div style="display: flex; gap: 6px;">
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
@@ -153,8 +153,8 @@
                 <img src="/screenshot-01.png" alt="Repos" style="height: 500px; width: auto;" />
               </div>
             </div>
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(96, 165, 250, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #1a1f35; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
+            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
+              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
                 <div style="display: flex; gap: 6px;">
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
@@ -166,8 +166,8 @@
                 <img src="/screenshot-02.png" alt="Tags" style="display: block; width: auto; height: 500px;" />
               </div>
             </div>
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(96, 165, 250, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #1a1f35; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
+            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
+              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
                 <div style="display: flex; gap: 6px;">
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
@@ -180,8 +180,8 @@
               </div>
             </div>
             <!-- 复制一组实现无缝循环 -->
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(96, 165, 250, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #1a1f35; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
+            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
+              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
                 <div style="display: flex; gap: 6px;">
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
@@ -193,8 +193,8 @@
                 <img src="/screenshot-01.png" alt="Repos" style="height: 500px; width: auto;" />
               </div>
             </div>
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(96, 165, 250, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #1a1f35; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
+            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
+              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
                 <div style="display: flex; gap: 6px;">
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
@@ -206,8 +206,8 @@
                 <img src="/screenshot-02.png" alt="Tags" style="display: block; width: auto; height: 500px;" />
               </div>
             </div>
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(96, 165, 250, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #1a1f35; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
+            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
+              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
                 <div style="display: flex; gap: 6px;">
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
                   <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
@@ -505,7 +505,7 @@ const toggleLanguage = () => {
   align-items: center;
   overflow-x: hidden;
   overflow-y: auto;
-  background: linear-gradient(135deg, #1a1f35 0%, #2d3561 50%, #1e2a47 100%);
+  background: linear-gradient(135deg, #0f1628 0%, #1e2547 50%, #151d30 100%);
   z-index: 100;
 }
 
@@ -623,7 +623,7 @@ const toggleLanguage = () => {
   transition: color 0.2s;
 
   &:hover {
-    color: #60a5fa;
+    color: #7c8cf8;
   }
 }
 
@@ -642,7 +642,7 @@ const toggleLanguage = () => {
   background: rgba(255, 255, 255, 0.1);
 
   &:hover {
-    color: #60a5fa;
+    color: #7c8cf8;
     background: rgba(255, 255, 255, 0.15);
   }
 }
@@ -695,7 +695,7 @@ const toggleLanguage = () => {
 }
 
 .hero-highlight {
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7c8cf8 0%, #6366f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -757,7 +757,7 @@ const toggleLanguage = () => {
   display: block;
   font-size: 1rem;
   font-weight: 700;
-  color: #60a5fa;
+  color: #7c8cf8;
   margin-bottom: 4px;
 }
 
@@ -796,14 +796,14 @@ const toggleLanguage = () => {
   font-size: 1rem;
   font-weight: 600;
   border-radius: 12px;
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7c8cf8 0%, #6366f1 100%);
   border: none;
   transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(96, 165, 250, 0.4);
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 12px 28px rgba(124, 140, 248, 0.4);
+    background: linear-gradient(135deg, #6366f1 0%, #2563eb 100%);
   }
 }
 
@@ -818,7 +818,7 @@ const toggleLanguage = () => {
   transition: color 0.2s;
 
   &:hover {
-    color: #60a5fa;
+    color: #7c8cf8;
   }
 }
 
@@ -859,7 +859,7 @@ const toggleLanguage = () => {
   position: absolute;
     width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(96, 165, 250, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(124, 140, 248, 0.3) 0%, transparent 70%);
   animation: glow-pulse 3s ease-in-out infinite;
 }
 
@@ -882,7 +882,7 @@ const toggleLanguage = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 60px rgba(96, 165, 250, 0.4);
+  box-shadow: 0 20px 60px rgba(124, 140, 248, 0.4);
   animation: logo-float 4s ease-in-out infinite;
   padding: 30px;
   position: relative;
@@ -1005,7 +1005,7 @@ const toggleLanguage = () => {
 .highlight-number {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #60a5fa;
+  color: #7c8cf8;
   margin-bottom: 8px;
 }
 
@@ -1040,7 +1040,7 @@ const toggleLanguage = () => {
   background: rgba(26, 31, 53, 0.9);
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(96, 165, 250, 0.2);
+  border: 1px solid rgba(124, 140, 248, 0.2);
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
 }
 
@@ -1134,7 +1134,7 @@ const toggleLanguage = () => {
 .mock-sidebar {
   width: 50px;
   height: 100px;
-  background: rgba(96, 165, 250, 0.3);
+  background: rgba(124, 140, 248, 0.3);
   border-radius: 6px;
   flex-shrink: 0;
 }
@@ -1199,7 +1199,7 @@ const toggleLanguage = () => {
 
   .ai-progress {
     fill: none;
-    stroke: #60a5fa;
+    stroke: #7c8cf8;
     stroke-width: 8;
     stroke-linecap: round;
     stroke-dasharray: 283;
@@ -1218,7 +1218,7 @@ const toggleLanguage = () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #60a5fa;
+  color: #7c8cf8;
   font-size: 1.1rem;
   font-weight: 700;
 }
@@ -1258,7 +1258,7 @@ const toggleLanguage = () => {
   height: 36px;
   background: rgba(26, 31, 53, 0.8);
   border-radius: 6px;
-  border-left: 3px solid #60a5fa;
+  border-left: 3px solid #7c8cf8;
   margin-top: 6px;
 }
 
@@ -1341,16 +1341,16 @@ const toggleLanguage = () => {
   flex-shrink: 0;
   width: 64px;
   height: 64px;
-  background: rgba(96, 165, 250, 0.15);
+  background: rgba(124, 140, 248, 0.15);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #60a5fa;
+  color: #7c8cf8;
   transition: all 0.3s ease;
 
   .feature-item:hover & {
-    background: rgba(96, 165, 250, 0.25);
+    background: rgba(124, 140, 248, 0.25);
     transform: scale(1.05);
   }
 }
@@ -1418,9 +1418,9 @@ const toggleLanguage = () => {
   align-items: center;
   text-align: center;
   padding: 28px 16px;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.08), rgba(59, 130, 246, 0.05));
+  background: linear-gradient(135deg, rgba(124, 140, 248, 0.08), rgba(59, 130, 246, 0.05));
   border-radius: 16px;
-  border: 1px solid rgba(96, 165, 250, 0.15);
+  border: 1px solid rgba(124, 140, 248, 0.15);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -1432,16 +1432,16 @@ const toggleLanguage = () => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(59, 130, 246, 0.05));
+    background: linear-gradient(135deg, rgba(124, 140, 248, 0.1), rgba(59, 130, 246, 0.05));
     opacity: 0;
     transition: opacity 0.4s ease;
   }
 
   &:hover {
-    background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(59, 130, 246, 0.1));
-    border-color: rgba(96, 165, 250, 0.4);
+    background: linear-gradient(135deg, rgba(124, 140, 248, 0.15), rgba(59, 130, 246, 0.1));
+    border-color: rgba(124, 140, 248, 0.4);
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 12px 32px rgba(96, 165, 250, 0.2);
+    box-shadow: 0 12px 32px rgba(124, 140, 248, 0.2);
 
     &::before {
       opacity: 1;
@@ -1457,7 +1457,7 @@ const toggleLanguage = () => {
   font-size: 2.5rem;
   margin-bottom: 16px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: drop-shadow(0 4px 8px rgba(96, 165, 250, 0.3));
+  filter: drop-shadow(0 4px 8px rgba(124, 140, 248, 0.3));
 }
 
 .tech-content {
@@ -1532,7 +1532,7 @@ const toggleLanguage = () => {
     transition: color 0.2s;
 
     &:hover {
-      color: #60a5fa;
+      color: #7c8cf8;
     }
   }
 }

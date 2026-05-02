@@ -103,18 +103,19 @@ watch(() => props.repo.id, () => {
 <style lang="scss" scoped>
 .repo-card {
   position: relative;
-  padding: $spacing-md;
+  padding: 14px 16px;
   background: var(--bg-secondary);
-  border-radius: $radius-md;
+  border-radius: $radius-lg;
   cursor: pointer;
   transition: all $transition-base;
   border: 1px solid transparent;
-  border-left: 2px solid transparent;
+  border-left: 3px solid transparent;
 
   &:hover {
     background: var(--bg-tertiary);
     border-color: var(--border);
-    
+    transform: translateX(2px);
+
     .repo-tag-toggle-btn {
       display: block;
     }
@@ -123,7 +124,7 @@ watch(() => props.repo.id, () => {
   &.is-active {
     background: var(--bg-tertiary);
     border-left-color: var(--el-color-primary);
-    
+
     .repo-tag-toggle-btn {
       display: block;
     }
@@ -257,7 +258,7 @@ watch(() => props.repo.id, () => {
   gap: $spacing-xs;
   
   .stat-icon {
-    color: #fbbf24;
+    color: $accent-amber;
     font-size: 14px;
   }
 }

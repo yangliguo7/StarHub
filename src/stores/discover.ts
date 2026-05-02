@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { githubApi } from '@/api/github'
 import type { Repository, TrendingPeriod } from '@/types'
+import type { RepoAnalysis } from '@/services/ai'
 
 interface CacheEntry {
   data: Repository[]
@@ -10,6 +11,8 @@ interface CacheEntry {
 export const useDiscoverStore = defineStore('discover', {
   state: () => ({
     repos: [] as Repository[],
+    analyses: new Map<number, RepoAnalysis>(),
+    analyzing: false,
     loading: false,
     period: 'daily' as TrendingPeriod,
     language: '',
@@ -28,6 +31,8 @@ export const useDiscoverStore = defineStore('discover', {
         this.repos = cached.data
         this.page = 1
         this.hasMore = this.repos.length < this.totalCount
+        // 对缓存数据也触发 AI 分析（如果还没分析过）
+        this.analyzeCurrentRepos()
         return
       }
 
@@ -49,11 +54,36 @@ export const useDiscoverStore = defineStore('discover', {
           data: this.repos,
           timestamp: Date.now()
         })
+
+        // 触发 AI 分析
+        this.analyzeCurrentRepos()
       } catch (error) {
         console.error('Failed to fetch trending repos:', error)
         throw error
       } finally {
         this.loading = false
+      }
+    },
+
+    async analyzeCurrentRepos() {
+      if (this.repos.length === 0 || this.analyzing) return
+
+      // 找出还没分析的仓库
+      const unanalyzed = this.repos.filter(r => !this.analyses.has(r.id))
+      if (unanalyzed.length === 0) return
+
+      this.analyzing = true
+      try {
+        const { analyzeTrendingRepos } = await import('@/services/ai')
+        const results = await analyzeTrendingRepos(unanalyzed)
+        // 合并到现有 analyses
+        for (const [id, analysis] of results) {
+          this.analyses.set(id, analysis)
+        }
+      } catch (error) {
+        console.error('AI analysis failed:', error)
+      } finally {
+        this.analyzing = false
       }
     },
 
@@ -71,6 +101,9 @@ export const useDiscoverStore = defineStore('discover', {
         )
         this.repos.push(...response.data.items)
         this.hasMore = this.repos.length < this.totalCount
+
+        // 对新加载的仓库触发 AI 分析
+        this.analyzeCurrentRepos()
       } catch (error) {
         console.error('Failed to load more repos:', error)
         this.page--
@@ -82,12 +115,14 @@ export const useDiscoverStore = defineStore('discover', {
 
     setPeriod(period: TrendingPeriod) {
       this.period = period
+      this.analyses.clear()
       this.fetchTrending()
     },
 
     setLanguage(language: string) {
       this.language = language
       this.page = 1
+      this.analyses.clear()
       this.fetchTrending()
     }
   }

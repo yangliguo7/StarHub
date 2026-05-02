@@ -182,14 +182,14 @@ onMounted(async () => {
 
   // 深色模式下的样式
   [data-theme='dark'] & {
-    background: rgba(96, 165, 250, 0.2);
+    background: rgba(124, 140, 248, 0.2);
     
     &:hover {
-      background: rgba(96, 165, 250, 0.5);
+      background: rgba(124, 140, 248, 0.5);
     }
     
     &:active {
-      background: rgba(96, 165, 250, 0.7);
+      background: rgba(124, 140, 248, 0.7);
     }
   }
 

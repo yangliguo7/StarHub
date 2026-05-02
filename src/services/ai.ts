@@ -113,10 +113,11 @@ async function callCloudflare(
 ): Promise<string> {
   // Cloudflare Workers AI 使用 OpenAI 兼容格式
   // 但需要 account_id 和特殊的 endpoint
-  const cfAccountId = accountId || localStorage.getItem('cf_account_id') || ''
+  const DEFAULT_CF_ACCOUNT_ID = '4820eefb61e7bc5415c5164aa9518293'
+  const cfAccountId = accountId || localStorage.getItem('cf_account_id') || DEFAULT_CF_ACCOUNT_ID
   
   if (!cfAccountId) {
-    throw new Error('请在设置中配置 Cloudflare Account ID')
+    throw new Error('请在设置中配置 Cloudflare Account ID（默认已内置）')
   }
   
   const url = `https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/ai/run/${model}`
@@ -502,6 +503,84 @@ function getDelayTime(provider: string): number {
     default:
       return 3
   }
+}
+
+// AI 分析热门仓库的智能摘要
+export interface RepoAnalysis {
+  id: number
+  summary: string        // 一句话说明
+  useCase: string        // 适用场景
+  officialUrl: string    // 官网/文档链接
+  tags: string[]         // 技术标签
+}
+
+export async function analyzeTrendingRepos(repos: Repository[]): Promise<Map<number, RepoAnalysis>> {
+  const result = new Map<number, RepoAnalysis>()
+
+  // 准备精简的仓库信息
+  const repoInfo = repos.map(r => ({
+    id: r.id,
+    name: r.name,
+    full_name: r.full_name,
+    description: r.description || '',
+    language: r.language || '',
+    topics: r.topics || [],
+    homepage: (r as any).homepage || '',
+    html_url: r.html_url
+  }))
+
+  const systemPrompt = `你是一个技术项目分析专家。对以下 GitHub 仓库进行智能分析，返回 JSON 数组。
+
+对每个仓库分析：
+- summary: 用一句简洁的中文说明这个项目是什么、做什么（不超过 50 字）
+- useCase: 适用场景/适合谁用（不超过 30 字，如"适合后端开发者构建微服务"）
+- officialUrl: 官网或文档链接。优先用 homepage 字段，如果没有则用 html_url
+- tags: 2-4 个技术标签（如 "TypeScript", "CLI工具", "数据库"）
+
+只返回 JSON 数组，不要有其他文字：
+[{"id": 123, "summary": "...", "useCase": "...", "officialUrl": "...", "tags": ["tag1", "tag2"]}]`
+
+  const userPrompt = JSON.stringify(repoInfo, null, 2)
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: userPrompt }
+  ]
+
+  try {
+    const config = getAIConfig()
+    const baseURL = config.baseURL || DEFAULT_BASE_URLS[config.provider]
+    const model = config.model || DEFAULT_MODELS[config.provider]
+
+    let responseText: string
+    if (config.provider === 'claude') {
+      responseText = await callClaude(messages, config.apiKey, baseURL, model)
+    } else if (config.provider === 'zhipu') {
+      responseText = await callZhipu(messages, config.apiKey, baseURL, model)
+    } else if (config.provider === 'cloudflare') {
+      responseText = await callCloudflare(messages, config.apiKey, baseURL, model)
+    } else {
+      responseText = await callOpenAICompatible(messages, config.apiKey, baseURL, model)
+    }
+
+    // 解析 JSON
+    let jsonText = responseText.trim()
+    if (jsonText.startsWith('```json')) jsonText = jsonText.replace(/^```json\s*/, '').replace(/\s*```$/, '')
+    else if (jsonText.startsWith('```')) jsonText = jsonText.replace(/^```\s*/, '').replace(/\s*```$/, '')
+
+    const arrMatch = jsonText.match(/\[[\s\S]*\]/)
+    if (!arrMatch) throw new Error('AI 返回格式错误')
+
+    const parsed: RepoAnalysis[] = JSON.parse(arrMatch[0])
+    for (const item of parsed) {
+      if (item.id && item.summary) {
+        result.set(item.id, item)
+      }
+    }
+  } catch (error) {
+    console.error('Failed to analyze trending repos:', error)
+  }
+
+  return result
 }
 
 // 预定义的分类颜色

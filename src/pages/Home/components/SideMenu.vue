@@ -141,23 +141,6 @@
       </el-collapse-transition>
     </div>
 
-    <!-- 发现和 AI 助手 -->
-    <div class="menu-section">
-      <div 
-        class="menu-item" 
-        :class="{ 'is-active': activeView === 'discover' }"
-        @click="$emit('switch-view', 'discover')"
-      >
-        <el-icon class="menu-icon"><TrendCharts /></el-icon>
-        <span class="menu-text">🔥 发现</span>
-      </div>
-      <div class="menu-item" @click="$emit('open-ai-chat')">
-        <el-icon class="menu-icon"><ChatDotRound /></el-icon>
-        <span class="menu-text">🤖 AI 助手</span>
-        <span class="menu-badge">AI</span>
-      </div>
-    </div>
-
     <div class="menu-section">
       <div class="menu-header collapsible" @click="languageExpanded = !languageExpanded">
         <h3>{{ t('menu.languages') }}</h3>
@@ -238,7 +221,7 @@ const tagStore = useTagStore()
 const repoStore = useRepoStore()
 
 const showCreateTagDialog = ref(false)
-const newTag = ref({ name: '', emoji: '', color: '#409EFF' })
+const newTag = ref({ name: '', emoji: '', color: '#7c8cf8' })
 const selectedTagId = computed(() => repoStore.selectedTag)
 const selectedLanguage = computed(() => repoStore.selectedLanguage)
 const filterType = computed(() => repoStore.filterType)
@@ -323,7 +306,7 @@ const handleCreateTag = async () => {
   try {
     await tagStore.createTag(newTag.value.name, newTag.value.color, newTag.value.emoji)
     showCreateTagDialog.value = false
-    newTag.value = { name: '', emoji: '', color: '#409EFF' }
+    newTag.value = { name: '', emoji: '', color: '#7c8cf8' }
   } catch (error) {
     console.error('Failed to create tag:', error)
   }
@@ -866,7 +849,7 @@ onMounted(() => {
   
   // 深色模式下使用与应用一致的背景色
   [data-theme='dark'] & {
-    background: #252d3d !important;
+    background: #1a2035 !important;
   }
 
   // 明亮模式按钮样式
@@ -890,11 +873,11 @@ onMounted(() => {
   [data-theme='dark'] & {
     .el-button.is-text,
     .el-button.is-circle {
-      color: #c0c0c0 !important;
+      color: #a0a8c0 !important;
       
       &:hover {
         color: #ffffff !important;
-        background-color: #353535 !important;
+        background-color: #2a3248 !important;
       }
       
       .el-icon {
@@ -922,17 +905,17 @@ onMounted(() => {
   }
 
   &.active {
-    background: rgba(64, 158, 255, 0.15) !important;
-    border-color: rgba(64, 158, 255, 0.4) !important;
-    color: #409EFF !important;
+    background: rgba(124, 140, 248, 0.15) !important;
+    border-color: rgba(124, 140, 248, 0.4) !important;
+    color: #7c8cf8 !important;
     font-weight: 500;
     
     .menu-icon {
-      color: #409EFF !important;
+      color: #7c8cf8 !important;
     }
     
     .menu-text {
-      color: #409EFF !important;
+      color: #7c8cf8 !important;
     }
     
     .menu-badge {
@@ -946,7 +929,7 @@ onMounted(() => {
 }
 
 .menu-sync-icon {
-      color: #409EFF !important;
+      color: #7c8cf8 !important;
     }
     
     .menu-count {
@@ -1076,7 +1059,7 @@ onMounted(() => {
         color: var(--el-color-danger) !important;
         
         &:hover {
-          background: rgba(245, 108, 108, 0.1) !important;
+          background: rgba(248, 113, 113, 0.1) !important;
         }
       }
     }

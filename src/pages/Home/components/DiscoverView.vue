@@ -10,12 +10,12 @@
           <el-radio-button value="weekly">周榜</el-radio-button>
           <el-radio-button value="monthly">月榜</el-radio-button>
         </el-radio-group>
-        
+
         <!-- 语言筛选 -->
-        <el-select 
-          v-model="currentLanguage" 
-          clearable 
-          placeholder="所有语言" 
+        <el-select
+          v-model="currentLanguage"
+          clearable
+          placeholder="所有语言"
           size="small"
           style="width: 120px"
         >
@@ -34,30 +34,37 @@
         </el-select>
       </div>
     </div>
-    
+
+    <!-- AI 分析状态 -->
+    <div v-if="analyzing" class="ai-status">
+      <el-icon class="is-loading"><Loading /></el-icon>
+      <span>AI 正在分析仓库信息...</span>
+    </div>
+
     <!-- 仓库列表 -->
     <div class="discover-repos" v-loading="loading">
-      <div 
-        v-for="(repo, index) in repos" 
+      <div
+        v-for="(repo, index) in repos"
         :key="repo.id"
         class="trending-repo-item"
       >
         <span class="rank-badge" :class="getRankClass(index + 1)">
           #{{ index + 1 }}
         </span>
-        <RepoCard 
-          :repo="repo" 
+        <DiscoverRepoCard
+          :repo="repo"
+          :analysis="analyses.get(repo.id) || null"
           @click="$emit('repo-click', repo)"
         />
       </div>
-      
+
       <el-empty v-if="!loading && repos.length === 0" description="暂无数据" />
     </div>
-    
+
     <!-- 加载更多 -->
     <div class="load-more" v-if="hasMore && repos.length > 0">
-      <el-button 
-        @click="loadMore" 
+      <el-button
+        @click="loadMore"
         :loading="loadingMore"
         :disabled="loading"
       >
@@ -71,7 +78,8 @@
 import { ref, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDiscoverStore } from '@/stores/discover'
-import RepoCard from './RepoCard.vue'
+import DiscoverRepoCard from './DiscoverRepoCard.vue'
+import { Loading } from '@element-plus/icons-vue'
 import type { Repository, TrendingPeriod } from '@/types'
 
 const emit = defineEmits<{
@@ -79,7 +87,7 @@ const emit = defineEmits<{
 }>()
 
 const store = useDiscoverStore()
-const { repos, loading, hasMore } = storeToRefs(store)
+const { repos, loading, hasMore, analyses, analyzing } = storeToRefs(store)
 
 const currentPeriod = ref<TrendingPeriod>('daily')
 const currentLanguage = ref('')
@@ -149,6 +157,23 @@ onMounted(() => {
   align-items: center;
 }
 
+.ai-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: var(--el-fill-color-light);
+  font-size: 0.8125rem;
+  color: var(--el-color-primary);
+  flex-shrink: 0;
+
+  [data-theme='dark'] & {
+    background: rgba(96, 165, 250, 0.1);
+  }
+}
+
 .discover-repos {
   flex: 1;
   overflow-y: auto;
@@ -170,8 +195,8 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   background: var(--el-fill-color-light);
-  border-radius: 8px;
-  font-weight: 600;
+  border-radius: 10px;
+  font-weight: 700;
   font-size: 14px;
   color: var(--el-text-color-secondary);
 }
@@ -191,9 +216,9 @@ onMounted(() => {
   color: #fff;
 }
 
-.trending-repo-item :deep(.repo-card) {
+.trending-repo-item :deep(.discover-repo-card) {
   flex: 1;
-  margin: 0;
+  min-width: 0;
 }
 
 .load-more {
