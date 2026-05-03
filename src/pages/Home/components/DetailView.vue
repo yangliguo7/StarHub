@@ -39,7 +39,7 @@
             <span class="license-badge">{{ repo.license.spdx_id || 'License' }}</span>
           </div>
           <div class="meta-item updated">
-            Updated {{ formatDate(repo.updated_at) }}
+            {{ t('repo.updated') }} {{ formatDate(repo.updated_at) }}
           </div>
         </div>
       </div>
@@ -56,12 +56,12 @@
 
     <el-dialog
       v-model="showTagDialog"
-      title="Add Tag"
+      :title="t('detail.addTag')"
       width="400px"
     >
       <el-select
         v-model="selectedTagId"
-        placeholder="Select a tag"
+        :placeholder="t('detail.selectTag')"
         filterable
         style="width: 100%"
       >
@@ -85,8 +85,8 @@
         </el-option>
       </el-select>
       <template #footer>
-        <el-button @click="showTagDialog = false">Cancel</el-button>
-        <el-button type="primary" @click="handleAddTag">Add</el-button>
+        <el-button @click="showTagDialog = false">{{ t('common.cancel') }}</el-button>
+        <el-button type="primary" @click="handleAddTag">{{ t('common.confirm') }}</el-button>
       </template>
     </el-dialog>
   </div>
@@ -94,6 +94,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useTagStore } from '@/stores/tag'
 import { useThemeStore } from '@/stores/theme'
 import { githubApi } from '@/api/github'
@@ -137,6 +138,7 @@ marked.use(
   }
 )
 
+const { t } = useI18n()
 const themeStore = useThemeStore()
 
 const props = defineProps<{

@@ -46,7 +46,7 @@
     <!-- AI 对话弹窗 -->
     <el-dialog
       v-model="showAIChat"
-      title="🤖 AI 助手"
+      :title="t('menu.aiAssistant')"
       width="600px"
       :close-on-click-modal="false"
       destroy-on-close
@@ -58,6 +58,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRepoStore } from '@/stores/repo'
 import { useTagStore } from '@/stores/tag'
 import HomeLayout from '@/layouts/HomeLayout.vue'
@@ -69,6 +70,7 @@ import DiscoverView from './components/DiscoverView.vue'
 import AIChatDialog from './components/AIChatDialog.vue'
 import type { Repository } from '@/types'
 
+const { t } = useI18n()
 const repoStore = useRepoStore()
 const tagStore = useTagStore()
 

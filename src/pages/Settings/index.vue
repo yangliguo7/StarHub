@@ -88,14 +88,14 @@
             />
           </el-form-item>
         <!-- Cloudflare Account ID (only show when cloudflare is selected) -->
-        <el-form-item v-if="aiConfig.provider === 'cloudflare'" label="Account ID">
+        <el-form-item v-if="aiConfig.provider === 'cloudflare'" :label="t('settings.accountId')">
           <el-input
             v-model="cfAccountId"
-            placeholder="4820eefb61e7bc5415c5164aa9518293（默认已内置）"
+            :placeholder="t('settings.accountIdPlaceholder')"
             @change="saveCfAccountId"
           />
           <div class="form-tip">
-            在 https://dash.cloudflare.com/ 右侧找到 Account ID
+            {{ t('settings.accountIdTip') }}
           </div>
         </el-form-item>
 
@@ -108,7 +108,7 @@
                 <el-button @click="resetBaseURL">{{ t('common.reset') }}</el-button>
               </template>
             </el-input>
-            <div class="form-tip">完整 API 端点 URL，留空使用默认值</div>
+            <div class="form-tip">{{ t('settings.fullApiEndpoint') }}</div>
           </el-form-item>
 
           <el-form-item :label="t('settings.model')">
@@ -195,19 +195,19 @@
             </el-button>
             <el-button @click="handleCheckDatabase" size="small" text>
               <el-icon><View /></el-icon>
-              检查数据库
+              {{ t('settings.checkDatabase') }}
             </el-button>
           </div>
 
           <el-alert
             v-if="repoStore.isSyncing"
-            title="正在同步数据"
+            :title="t('settings.syncingData')"
             type="warning"
             :closable="false"
             show-icon
             style="margin-bottom: 16px;"
           >
-            正在从 GitHub 同步数据 ({{ repoStore.syncProgress.count }} 个仓库)。清空数据前会先停止同步。
+            {{ t('settings.syncingDataDesc', { count: repoStore.syncProgress.count }) }}
           </el-alert>
 
           <div class="data-stats" v-if="dataStats">
@@ -685,7 +685,7 @@ const handleSavePreset = async () => {
     color: '#409EFF',
     keywordsStr: ''
   }
-  ElMessage.success(isEditing ? '更新成功' : '添加成功')
+  ElMessage.success(t('common.success'))
 }
 
 const handleProviderChange = () => {
@@ -717,7 +717,7 @@ const saveCfAccountId = () => {
 const handleSave = () => {
   // Cloudflare 不需要 API Key
   if (aiConfig.value.provider !== 'cloudflare' && !aiConfig.value.apiKey) {
-    ElMessage.warning('请输入 API Key')
+    ElMessage.warning(t('settings.enterAPIKey'))
     return
   }
 
@@ -727,12 +727,12 @@ const handleSave = () => {
   }
 
   saveAIConfig(aiConfig.value)
-  ElMessage.success('设置已保存')
+  ElMessage.success(t('common.success'))
 }
 
 const handleTest = async () => {
   if (!aiConfig.value.apiKey) {
-    ElMessage.warning('请先输入 API Key')
+    ElMessage.warning(t('settings.enterAPIKey'))
     return
   }
 
@@ -774,14 +774,14 @@ const handleTest = async () => {
     }
 
     if (response.ok) {
-      ElMessage.success('连接成功！')
+      ElMessage.success(t('common.success'))
     } else {
       const error = await response.text()
       throw new Error(error)
     }
   } catch (error: any) {
     console.error('Test failed:', error)
-    ElMessage.error(`连接失败: ${error.message}`)
+    ElMessage.error(`${t('common.error')}: ${error.message}`)
   } finally {
     testing.value = false
   }
@@ -821,10 +821,10 @@ const handleExport = async () => {
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
     
-    ElMessage.success(`数据已导出到 ${filename}`)
+    ElMessage.success(t('settings.exportSuccess', { filename }))
   } catch (error) {
     console.error('Export failed:', error)
-    ElMessage.error('导出失败')
+    ElMessage.error(t('settings.exportFailed'))
   } finally {
     exporting.value = false
   }
@@ -855,15 +855,15 @@ const handleImport = () => {
       
       // 确认导入
       await ElMessageBox.confirm(
-        `即将导入数据：\n` +
-        `- 仓库：${importData.data.repos?.length || 0} 个\n` +
-        `- 分类：${importData.data.tags?.length || 0} 个\n` +
-        `- 导出日期：${importData.exportDate}\n\n` +
-        `⚠️ 此操作将覆盖当前所有数据，是否继续？`,
-        '确认导入',
+        t('settings.importConfirm', {
+          repos: importData.data.repos?.length || 0,
+          tags: importData.data.tags?.length || 0,
+          date: importData.exportDate
+        }),
+        t('settings.importConfirmTitle'),
         {
-          confirmButtonText: '确认导入',
-          cancelButtonText: '取消',
+          confirmButtonText: t('settings.confirmImport'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning',
           confirmButtonClass: 'el-button--danger'
         }
@@ -893,12 +893,12 @@ const handleImport = () => {
       await repoStore.loadRepos()
       await loadDataStats()
       
-      ElMessage.success('数据导入成功！')
-      
+      ElMessage.success(t('settings.importSuccess'))
+
       // 自动返回主页
       setTimeout(() => {
         ElMessage({
-          message: '数据已导入，正在返回主页...',
+          message: t('settings.navigatingHomeImport'),
           type: 'success',
           duration: 1500
         })
@@ -914,7 +914,7 @@ const handleImport = () => {
     } catch (error: any) {
       if (error !== 'cancel') {
         console.error('Import failed:', error)
-        ElMessage.error(`导入失败: ${error.message || '未知错误'}`)
+        ElMessage.error(`${t('settings.importFailed')}: ${error.message || t('error.unknown')}`)
       }
     } finally {
       importing.value = false
@@ -933,22 +933,23 @@ const handleCheckDatabase = async () => {
     const isOpen = db.isOpen()
     
     await ElMessageBox.alert(
-      `数据库状态:\n\n` +
-      `- 数据库状态: ${isOpen ? '已打开' : '已关闭'}\n` +
-      `- 数据库中的仓库: ${repoCount} 个\n` +
-      `- 数据库中的标签: ${tagCount} 个\n` +
-      `- 数据库中的关联: ${repoTagCount} 个\n` +
-      `- Store 中的仓库: ${repoStore.repos.length} 个\n` +
-      `- Store 中的标签: ${tagStore.tags.length} 个`,
-      '数据库状态',
+      t('settings.dbStatusInfo', {
+        dbStatus: isOpen ? t('settings.dbOpen') : t('settings.dbClosed'),
+        repoCount,
+        tagCount,
+        repoTagCount,
+        storeRepos: repoStore.repos.length,
+        storeTags: tagStore.tags.length
+      }),
+      t('settings.dbStatus'),
       {
-        confirmButtonText: '关闭',
+        confirmButtonText: t('settings.close'),
         type: 'info'
       }
     )
   } catch (error) {
     console.error('检查数据库失败:', error)
-    ElMessage.error('检查数据库失败')
+    ElMessage.error(t('settings.dbCheckFailed'))
   }
 }
 
@@ -957,32 +958,30 @@ const handleClearAll = async () => {
   try {
     // Check if syncing
     const isSyncing = repoStore.isSyncing
-    let confirmMessage = '⚠️ 此操作将清空所有数据，包括：\n' +
-      `- ${dataStats.value?.repos || 0} 个仓库\n` +
-      `- ${dataStats.value?.tags || 0} 个分类\n` +
-      `- 所有分类关联关系\n\n`
-    
+    let confirmMessage = t('settings.clearAllWarning', {
+      repos: dataStats.value?.repos || 0,
+      tags: dataStats.value?.tags || 0
+    })
+
     if (isSyncing) {
-      confirmMessage += '⚠️ 检测到正在进行同步操作！\n' +
-                       '清空数据前会先停止同步。\n\n'
+      confirmMessage += t('settings.syncingDetected')
     }
-    
-    confirmMessage += '建议先导出数据进行备份。\n\n' +
-                     '此操作不可恢复，是否继续？'
-    
+
+    confirmMessage += t('settings.clearAllTip')
+
     await ElMessageBox.confirm(
       confirmMessage,
-      '确认清空所有数据',
+      t('settings.confirmClearAll'),
       {
-        confirmButtonText: '确认清空',
-        cancelButtonText: '取消',
+        confirmButtonText: t('settings.confirmClear'),
+        cancelButtonText: t('common.cancel'),
         type: 'error',
         confirmButtonClass: 'el-button--danger'
       }
     )
     
     let loading = ElMessage({
-      message: '正在清空数据...',
+      message: t('settings.clearingData'),
       type: 'info',
       duration: 0
     })
@@ -997,7 +996,7 @@ const handleClearAll = async () => {
       if (wasSyncing) {
         loading.close()
         const stoppingMsg = ElMessage({
-          message: '正在停止同步操作，请稍候...',
+          message: t('settings.stoppingSync'),
           type: 'warning',
           duration: 0
         })
@@ -1024,7 +1023,7 @@ const handleClearAll = async () => {
         
         // Re-show loading message
         loading = ElMessage({
-          message: '正在清空数据...',
+          message: t('settings.clearingData'),
           type: 'info',
           duration: 0
         })
@@ -1106,11 +1105,11 @@ const handleClearAll = async () => {
         
         const { ElMessageBox } = await import('element-plus')
         await ElMessageBox.confirm(
-          '常规清空方式失败。需要删除并重建整个数据库。\n\n这将需要刷新页面。是否继续？',
-          '需要重建数据库',
+          t('settings.rebuildDbConfirm'),
+          t('settings.rebuildDbTitle'),
           {
-            confirmButtonText: '删除并重建',
-            cancelButtonText: '取消',
+            confirmButtonText: t('settings.deleteAndRebuild'),
+            cancelButtonText: t('common.cancel'),
             type: 'warning'
           }
         )
@@ -1135,12 +1134,12 @@ const handleClearAll = async () => {
       await loadDataStats()
       
       loading.close()
-      ElMessage.success('所有数据已清空')
-      
+      ElMessage.success(t('settings.clearSuccess'))
+
       // Auto navigate to home page
       setTimeout(() => {
         ElMessage({
-          message: '数据已清空，正在返回主页...',
+          message: t('settings.navigatingHome'),
           type: 'success',
           duration: 1500
         })
@@ -1158,15 +1157,11 @@ const handleClearAll = async () => {
       
       // Show detailed error
       await ElMessageBox.alert(
-        `清空失败: ${error.message || '未知错误'}\n\n` +
-        '请尝试以下步骤:\n' +
-        '1. 刷新页面后重试\n' +
-        '2. 清除浏览器缓存\n' +
-        '3. 使用浏览器开发者工具手动删除 IndexedDB\n\n' +
-        '或直接点击右上角菜单的"重新抓取"来清空并重新获取数据。',
-        '清空失败',
+        `${t('settings.clearFailed')}: ${error.message || t('error.unknown')}\n\n` +
+        t('settings.clearFailedTip'),
+        t('settings.clearFailed'),
         {
-          confirmButtonText: '我知道了',
+          confirmButtonText: t('settings.iKnow'),
           type: 'error'
         }
       )

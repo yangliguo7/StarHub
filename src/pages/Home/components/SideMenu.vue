@@ -33,11 +33,11 @@
         @click="$emit('switch-view', 'discover')"
       >
         <el-icon class="menu-icon"><TrendCharts /></el-icon>
-        <span class="menu-text">🔥 发现</span>
+        <span class="menu-text">{{ t('menu.discover') }}</span>
       </div>
       <div class="menu-item" @click="$emit('open-ai-chat')">
         <el-icon class="menu-icon"><ChatDotRound /></el-icon>
-        <span class="menu-text">🤖 AI 助手</span>
+        <span class="menu-text">{{ t('menu.aiAssistant') }}</span>
         <span class="menu-badge">AI</span>
       </div>
       <div
@@ -46,7 +46,7 @@
         @click="$emit('trigger-ai-analysis')"
       >
         <el-icon class="menu-icon" :class="{ 'is-loading': aiAnalyzing }"><MagicStick /></el-icon>
-        <span class="menu-text">{{ aiAnalyzing ? `AI 分析中... ${aiProgress.current}/${aiProgress.total}` : '✨ AI 摘要分析' }}</span>
+        <span class="menu-text">{{ aiAnalyzing ? `AI ${t('tag.classifying')} ${aiProgress.current}/${aiProgress.total}` : t('menu.aiSummary') }}</span>
         <span v-if="aiAnalyzing" class="menu-badge analyzing">AI</span>
       </div>
     </div>
@@ -55,7 +55,7 @@
       <div class="menu-header collapsible" @click="categoryExpanded = !categoryExpanded">
         <h3>{{ t('menu.tags') }}</h3>
         <div class="menu-actions" @click.stop>
-          <el-tooltip :content="isClassifying ? '分类进行中...' : 'AI 智能分类（仅未分类）'" placement="top">
+          <el-tooltip :content="isClassifying ? t('tag.classifying') : t('tag.classifyIncremental')" placement="top">
             <el-button
               text
               circle
@@ -68,7 +68,7 @@
               <el-icon v-if="!isClassifying"><MagicStick /></el-icon>
             </el-button>
           </el-tooltip>
-          <el-tooltip content="停止分类" placement="top" v-if="isClassifying">
+          <el-tooltip :content="t('tag.classifyStopped')" placement="top" v-if="isClassifying">
             <el-button
               text
               circle

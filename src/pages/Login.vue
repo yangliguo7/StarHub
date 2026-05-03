@@ -137,88 +137,23 @@
     <div class="screenshot-section">
       <div class="screenshot-container">
         <h2 class="section-title">{{ currentLanguage === 'zh' ? '界面预览' : 'Interface Preview' }}</h2>
-        <div class="carousel-wrapper" style="margin-top: 40px; overflow: hidden; width: 100%;">
-          <div class="carousel-track" style="display: flex; gap: 32px; animation: carousel-scroll 30s linear infinite; align-items: flex-start;">
-            <!-- 4张卡片 -->
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
-                <div style="display: flex; gap: 6px;">
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></span>
+        <div class="carousel-wrapper">
+          <div class="carousel-track">
+            <template v-for="round in 2" :key="round">
+              <div class="preview-card" v-for="(screenshot, idx) in screenshots" :key="`${round}-${idx}`">
+                <div class="preview-card-header">
+                  <div class="preview-dots">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                  </div>
+                  <div class="preview-card-title">{{ screenshot.title }}</div>
                 </div>
-                <div style="color: rgba(255,255,255,0.6); font-size: 0.7rem; flex: 1; text-align: center; padding-right: 40px;">{{ currentLanguage === 'zh' ? '登录界面' : 'Login Interface' }}</div>
-              </div>
-              <div style="padding: 0; background: linear-gradient(135deg, rgba(45, 53, 97, 0.4), rgba(26, 31, 53, 0.6)); line-height: 0;">
-                <img src="/screenshot-01.png" alt="Repos" style="height: 500px; width: auto;" />
-              </div>
-            </div>
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
-                <div style="display: flex; gap: 6px;">
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></span>
+                <div class="preview-card-content">
+                  <img :src="screenshot.src" :alt="screenshot.alt" class="preview-card-img" />
                 </div>
-                <div style="color: rgba(255,255,255,0.6); font-size: 0.7rem; flex: 1; text-align: center; padding-right: 40px;">{{ currentLanguage === 'zh' ? '主界面' : 'Main Interface' }}</div>
               </div>
-              <div style="padding: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(45, 53, 97, 0.4), rgba(26, 31, 53, 0.6));">
-                <img src="/screenshot-02.png" alt="Tags" style="display: block; width: auto; height: 500px;" />
-              </div>
-            </div>
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
-                <div style="display: flex; gap: 6px;">
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></span>
-                </div>
-                <div style="color: rgba(255,255,255,0.6); font-size: 0.7rem; flex: 1; text-align: center; padding-right: 40px;">{{ currentLanguage === 'zh' ? '用户指南' : 'User Guide' }}</div>
-              </div>
-              <div style="padding: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(45, 53, 97, 0.4), rgba(26, 31, 53, 0.6));">
-                <img src="/screenshot-03.png" alt="AI" style="display: block; width: auto; height: 500px;" />
-              </div>
-            </div>
-            <!-- 复制一组实现无缝循环 -->
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
-                <div style="display: flex; gap: 6px;">
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></span>
-                </div>
-                <div style="color: rgba(255,255,255,0.6); font-size: 0.7rem; flex: 1; text-align: center; padding-right: 40px;">{{ currentLanguage === 'zh' ? '登录界面' : 'Login Interface' }}</div>
-              </div>
-              <div style="padding: 0; background: linear-gradient(135deg, rgba(45, 53, 97, 0.4), rgba(26, 31, 53, 0.6)); line-height: 0;">
-                <img src="/screenshot-01.png" alt="Repos" style="height: 500px; width: auto;" />
-              </div>
-            </div>
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
-                <div style="display: flex; gap: 6px;">
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></span>
-                </div>
-                <div style="color: rgba(255,255,255,0.6); font-size: 0.7rem; flex: 1; text-align: center; padding-right: 40px;">{{ currentLanguage === 'zh' ? '主界面' : 'Main Interface' }}</div>
-              </div>
-              <div style="padding: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(45, 53, 97, 0.4), rgba(26, 31, 53, 0.6));">
-                <img src="/screenshot-02.png" alt="Tags" style="display: block; width: auto; height: 500px;" />
-              </div>
-            </div>
-            <div class="preview-card" style="flex-shrink: 0; background: rgba(26, 31, 53, 0.95); border: 1px solid rgba(124, 140, 248, 0.3); overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); width: fit-content;">
-              <div style="height: 32px; background: #0f1628; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 12px; gap: 8px;">
-                <div style="display: flex; gap: 6px;">
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></span>
-                </div>
-                <div style="color: rgba(255,255,255,0.6); font-size: 0.7rem; flex: 1; text-align: center; padding-right: 40px;">{{ currentLanguage === 'zh' ? '用户指南' : 'User Guide' }}</div>
-              </div>
-              <div style="padding: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(45, 53, 97, 0.4), rgba(26, 31, 53, 0.6));">
-                <img src="/screenshot-03.png" alt="AI" style="display: block; width: auto; height: 500px;" />
-              </div>
-            </div>
+            </template>
           </div>
         </div>
       </div>
@@ -285,42 +220,42 @@
         <p class="section-subtitle">{{ currentLanguage === 'zh' ? '采用 2024 年最新技术构建，确保极致性能与开发体验' : 'Built with cutting-edge 2024 technologies for optimal performance and DX' }}</p>
         <div class="tech-grid">
           <div class="tech-item">
-            <div class="tech-icon">⚡</div>
+            <div class="tech-icon"><el-icon :size="32"><Lightning /></el-icon></div>
             <div class="tech-content">
               <span class="tech-name">Vue 3</span>
               <span class="tech-desc">{{ currentLanguage === 'zh' ? '组合式 API' : 'Composition API' }}</span>
             </div>
           </div>
           <div class="tech-item">
-            <div class="tech-icon">🔷</div>
+            <div class="tech-icon"><el-icon :size="32"><Document /></el-icon></div>
             <div class="tech-content">
               <span class="tech-name">TypeScript</span>
               <span class="tech-desc">{{ currentLanguage === 'zh' ? '类型安全' : 'Type Safe' }}</span>
             </div>
           </div>
           <div class="tech-item">
-            <div class="tech-icon">🚀</div>
+            <div class="tech-icon"><el-icon :size="32"><Promotion /></el-icon></div>
             <div class="tech-content">
               <span class="tech-name">Vite</span>
               <span class="tech-desc">{{ currentLanguage === 'zh' ? '极速构建' : 'Fast Build' }}</span>
             </div>
           </div>
           <div class="tech-item">
-            <div class="tech-icon">📦</div>
+            <div class="tech-icon"><el-icon :size="32"><Box /></el-icon></div>
             <div class="tech-content">
               <span class="tech-name">Pinia</span>
               <span class="tech-desc">{{ currentLanguage === 'zh' ? '状态管理' : 'State Management' }}</span>
             </div>
           </div>
           <div class="tech-item">
-            <div class="tech-icon">🎨</div>
+            <div class="tech-icon"><el-icon :size="32"><Brush /></el-icon></div>
             <div class="tech-content">
               <span class="tech-name">Element Plus</span>
               <span class="tech-desc">{{ currentLanguage === 'zh' ? 'UI 组件库' : 'UI Components' }}</span>
             </div>
           </div>
           <div class="tech-item">
-            <div class="tech-icon">💾</div>
+            <div class="tech-icon"><el-icon :size="32"><Coin /></el-icon></div>
             <div class="tech-content">
               <span class="tech-name">Dexie.js</span>
               <span class="tech-desc">{{ currentLanguage === 'zh' ? '本地数据库' : 'IndexedDB' }}</span>
@@ -342,7 +277,7 @@
           <a href="https://github.com/hujinghaoabcd/StarHub/issues" target="_blank">{{ currentLanguage === 'zh' ? '问题反馈' : 'Issues' }}</a>
           <a href="https://github.com/hujinghaoabcd/StarHub/blob/main/LICENSE" target="_blank">MIT License</a>
         </div>
-        <p class="footer-copyright">&copy; 2024 StarHub. {{ currentLanguage === 'zh' ? '专业的 GitHub Stars 管理工具，让你的收藏井井有条。' : 'Professional GitHub Stars management tool. Organize your collection with ease.' }}</p>
+        <p class="footer-copyright">&copy; StarHub. {{ currentLanguage === 'zh' ? '专业的 GitHub Stars 管理工具，让你的收藏井井有条。' : 'Professional GitHub Stars management tool. Organize your collection with ease.' }}</p>
         <p class="footer-made">{{ currentLanguage === 'zh' ? '用 ❤️ 和 Vue 3 + TypeScript + Vite 构建' : 'Made with ❤️ using Vue 3 + TypeScript + Vite' }}</p>
       </div>
     </div>
@@ -358,7 +293,7 @@ import { useUserStore } from '@/stores/user'
 import { githubApi } from '@/api/github'
 import { AuthToken } from '@/utils/auth'
 import { openWindowCenter } from '@/utils'
-import { Link, Collection, Search, MagicStick, Reading } from '@element-plus/icons-vue'
+import { Link, Collection, Search, MagicStick, Reading, Lightning, Document, Promotion, Box, Brush, Coin } from '@element-plus/icons-vue'
 import { authApi } from '@/api/auth'
 import qs from 'query-string'
 import { GITHUB_OAUTH_CONFIG } from '@/config/oauth'
@@ -381,6 +316,12 @@ const docsUrl = computed(() => {
   }
   return '/docs/'
 })
+
+const screenshots = computed(() => [
+  { src: '/screenshot-01.png', alt: 'Login', title: currentLanguage.value === 'zh' ? '登录界面' : 'Login Interface' },
+  { src: '/screenshot-02.png', alt: 'Main', title: currentLanguage.value === 'zh' ? '主界面' : 'Main Interface' },
+  { src: '/screenshot-03.png', alt: 'Guide', title: currentLanguage.value === 'zh' ? '用户指南' : 'User Guide' },
+])
 
 // 处理 OAuth 回调（当从 GitHub 重定向回来时）
 onMounted(() => {
@@ -1088,12 +1029,14 @@ const toggleLanguage = () => {
   overflow: hidden;
   border-radius: 8px;
   width: 100%;
+  margin-top: 40px;
 }
 
 .carousel-track {
   display: flex;
-  gap: 20px;
-  animation: carousel-scroll 20s linear infinite;
+  gap: 32px;
+  align-items: flex-start;
+  animation: carousel-scroll 30s linear infinite;
 
   &:hover {
     animation-play-state: paused;
@@ -1105,8 +1048,79 @@ const toggleLanguage = () => {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-3328px);
+    transform: translateX(calc(-50% - 16px));
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stars-1,
+  .stars-2,
+  .stars-3,
+  .carousel-track,
+  .logo-glow,
+  .logo-wrapper,
+  .hero-left,
+  .hero-right {
+    animation: none !important;
+  }
+}
+
+// 预览卡片
+.preview-card {
+  flex-shrink: 0;
+  background: rgba(26, 31, 53, 0.95);
+  border: 1px solid rgba(124, 140, 248, 0.3);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  width: fit-content;
+}
+
+.preview-card-header {
+  height: 32px;
+  background: #0f1628;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+}
+
+.preview-dots {
+  display: flex;
+  gap: 6px;
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+
+    &.dot-red { background: #ff5f56; }
+    &.dot-yellow { background: #ffbd2e; }
+    &.dot-green { background: #27c93f; }
+  }
+}
+
+.preview-card-title {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.7rem;
+  flex: 1;
+  text-align: center;
+  padding-right: 40px;
+}
+
+.preview-card-content {
+  padding: 0;
+  background: linear-gradient(135deg, rgba(45, 53, 97, 0.4), rgba(26, 31, 53, 0.6));
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-card-img {
+  height: 500px;
+  width: auto;
+  display: block;
 }
 
 // 预览卡片
@@ -1335,6 +1349,7 @@ const toggleLanguage = () => {
   align-items: flex-start;
   gap: 24px;
   text-align: left;
+  cursor: default;
 }
 
 .feature-item-icon {
@@ -1458,6 +1473,10 @@ const toggleLanguage = () => {
   margin-bottom: 16px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   filter: drop-shadow(0 4px 8px rgba(124, 140, 248, 0.3));
+  color: #7c8cf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tech-content {
@@ -1546,18 +1565,6 @@ const toggleLanguage = () => {
 .footer-made {
   color: rgba(255, 255, 255, 0.3);
   font-size: 0.8125rem;
-}
-</style>
-
-<!-- 全局样式，确保 keyframes 生效 -->
-<style>
-@keyframes carousel-scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-3328px);
-  }
 }
 </style>
 
